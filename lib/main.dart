@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prisonbook/screens/attendance_screen.dart';
 import 'package:prisonbook/screens/home_page.dart';
 import 'package:prisonbook/screens/prison_view_page.dart';
 import 'package:prisonbook/screens/profile_edit_screen.dart';
@@ -15,6 +16,7 @@ class PrisonBook extends StatelessWidget {
       routes: {
         PrisonViewpage.routeName: (ctx) => PrisonViewpage(),
         ProfileEditScreen.routeName: (ctx) => ProfileEditScreen(),
+        AttendaceScreen.routeName: (ctx) => AttendaceScreen(),
       },
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prisonbook/models/dummyDatas.dart';
+import 'package:prisonbook/screens/attendance_screen.dart';
 import 'package:prisonbook/screens/prison_view_page.dart';
 import 'package:prisonbook/widgets/employee_drawer.dart';
 
@@ -12,7 +13,10 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.event)),
+          IconButton(
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(AttendaceScreen.routeName),
+              icon: Icon(Icons.event)),
           IconButton(onPressed: () {}, icon: Icon(Icons.local_police)),
         ],
       ),
