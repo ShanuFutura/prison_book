@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prisonbook/models/dummyDatas.dart';
+import 'package:prisonbook/screens/prison_view_page.dart';
 import 'package:prisonbook/widgets/employee_drawer.dart';
 
 class HomePage extends StatelessWidget {
@@ -7,6 +8,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fullHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -15,15 +17,29 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           const SizedBox(height: 200),
-          ListView.builder(
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              itemCount: DummyDatas.ListTileList.length,
-              itemBuilder: (context, index) {
-                return DummyDatas.ListTileList[index];
-              }),
+          Container(
+            alignment: Alignment.bottomCenter,
+            height: fullHeight / 2,
+            child: ListView.builder(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                itemCount: 12,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: CircleAvatar(),
+                    title: Text('title'),
+                    trailing: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(PrisonViewpage.routeName);
+                        },
+                        child: Text('test')),
+                  );
+                }),
+          ),
         ],
       ),
       drawer: EmployeeDrawer(),
