@@ -10,7 +10,32 @@ class MainPrisonerView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext ctx) {
+                return Dialog(
+                    child: Wrap(
+                  children: [
+                    DropdownButton(
+                        hint: Text('malicious act type'),
+                        items: const [
+                          DropdownMenuItem(
+                            child: Text('male'),
+                            value: 'male',
+                          ),
+                          DropdownMenuItem(
+                            child: Text('female'),
+                            value: 'female',
+                          )
+                        ],
+                        onChanged: (val) {}),
+                    ElevatedButton(onPressed: () {}, child: Text('date')),
+                    IconButton(onPressed: () {}, icon: Icon(Icons.done))
+                  ],
+                ));
+              });
+        },
         child: Icon(Icons.report),
       ),
       body: CustomScrollView(slivers: [

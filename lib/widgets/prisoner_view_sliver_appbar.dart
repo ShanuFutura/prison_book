@@ -32,10 +32,29 @@ class PrisonerViewSliverAppbar extends StatelessWidget {
               Text('cell'),
             ],
           ),
-          Card(
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Text('health stat'),
+          GestureDetector(
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                        child: Wrap(
+                      children: [
+                        Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
+                        Text('critical'),
+                        Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
+                        Text('not well'),
+                        Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
+                        Text('healthy'),
+                      ],
+                    ));
+                  });
+            },
+            child: Card(
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Text('health stat'),
+              ),
             ),
           )
         ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:prisonbook/screens/add_prisoner_screen.dart';
 import 'package:prisonbook/screens/attendance_screen.dart';
 import 'package:prisonbook/screens/main_prisoner_view.dart';
+import 'package:prisonbook/screens/officers_list_screen.dart';
 // import 'package:prisonbook/screens/prison_view_page.dart';
 import 'package:prisonbook/widgets/employee_drawer.dart';
 
@@ -19,7 +20,10 @@ class HomePage extends StatelessWidget {
               onPressed: () =>
                   Navigator.of(context).pushNamed(AttendaceScreen.routeName),
               icon: Icon(Icons.event)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.local_police)),
+          IconButton(
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(OfficersListScreen.routeName),
+              icon: Icon(Icons.local_police)),
         ],
       ),
       body: Column(
