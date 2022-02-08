@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prisonbook/screens/employees_list_screen.dart';
 import 'package:prisonbook/screens/profile_edit_screen.dart';
 
 class EmployeeDrawer extends StatelessWidget {
@@ -48,7 +49,14 @@ class EmployeeDrawer extends StatelessWidget {
           ),
           ListTile(
             title: Text('View Employees'),
-            trailing: IconButton(onPressed: () {}, icon: Icon(Icons.reorder)),
+            trailing: IconButton(
+                onPressed: () => Navigator.of(context)
+                    .pushNamed(EmployeesListScreen.routeName),
+                icon: Icon(Icons.reorder)),
+          ),
+          ListTile(
+            title: Text('officers'),
+            trailing: IconButton(onPressed: () {}, icon: Icon(Icons.chat)),
           ),
           ListTile(
             title: Text('feedback'),

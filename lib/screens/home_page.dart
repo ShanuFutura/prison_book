@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:prisonbook/models/dummyDatas.dart';
+// import 'package:prisonbook/models/dummyDatas.dart';
 import 'package:prisonbook/screens/add_prisoner_screen.dart';
 import 'package:prisonbook/screens/attendance_screen.dart';
-import 'package:prisonbook/screens/prison_view_page.dart';
+import 'package:prisonbook/screens/main_prisoner_view.dart';
+// import 'package:prisonbook/screens/prison_view_page.dart';
 import 'package:prisonbook/widgets/employee_drawer.dart';
 
 class HomePage extends StatelessWidget {
@@ -39,7 +40,7 @@ class HomePage extends StatelessWidget {
                     trailing: ElevatedButton(
                         onPressed: () {
                           Navigator.of(context)
-                              .pushNamed(PrisonViewpage.routeName);
+                              .pushNamed(MainPrisonerView.routeName);
                         },
                         child: Text('test')),
                   );
