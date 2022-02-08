@@ -19,7 +19,10 @@ class EmployeeDrawer extends StatelessWidget {
                 gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.indigo, Colors.white])),
+                    colors: [
+                  Colors.indigo,
+                  Colors.white,
+                ])),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
