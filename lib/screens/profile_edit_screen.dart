@@ -11,6 +11,14 @@ class ProfileEditScreen extends StatefulWidget {
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
   var _gender = '';
 
+  Widget greyContainerBuilder(Widget child) {
+    return Container(
+      color: Colors.black.withOpacity(.1),
+      padding: EdgeInsets.all(5),
+      child: child,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,19 +35,15 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                   'assets/avatar.png',
                 ),
               ),
-              Container(
-                color: Colors.black.withOpacity(.1),
-                padding: EdgeInsets.all(5),
-                child: TextFormField(
+              greyContainerBuilder(
+                TextFormField(
                   decoration: InputDecoration(label: Text('name')),
                 ),
               ),
-              Container(
-                child: TextFormField(
+              greyContainerBuilder(
+                TextFormField(
                     decoration: InputDecoration(label: Text('address')),
                     maxLines: 5),
-                color: Colors.black.withOpacity(.1),
-                padding: EdgeInsets.all(5),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -75,18 +79,16 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                   ),
                 ],
               ),
-              Container(
-                  color: Colors.black.withOpacity(.1),
-                  padding: EdgeInsets.all(5),
-                  child: TextFormField(
-                    decoration: InputDecoration(label: Text('phone')),
-                  )),
-              Container(
-                  color: Colors.black.withOpacity(.1),
-                  padding: EdgeInsets.all(5),
-                  child: TextFormField(
-                    decoration: InputDecoration(label: Text('email')),
-                  )),
+              greyContainerBuilder(
+                TextFormField(
+                  decoration: InputDecoration(label: Text('phone')),
+                ),
+              ),
+              greyContainerBuilder(
+                TextFormField(
+                  decoration: InputDecoration(label: Text('email')),
+                ),
+              ),
             ],
           ),
         ),

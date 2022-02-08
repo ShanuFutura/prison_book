@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prisonbook/models/dummyDatas.dart';
+import 'package:prisonbook/screens/add_prisoner_screen.dart';
 import 'package:prisonbook/screens/attendance_screen.dart';
 import 'package:prisonbook/screens/prison_view_page.dart';
 import 'package:prisonbook/widgets/employee_drawer.dart';
@@ -48,7 +49,8 @@ class HomePage extends StatelessWidget {
       ),
       drawer: EmployeeDrawer(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () =>
+            Navigator.of(context).pushNamed(AddPrisonerScreen.routeName),
         child: Icon(Icons.person_add_alt_1),
       ),
     );

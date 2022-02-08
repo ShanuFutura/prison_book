@@ -10,7 +10,7 @@ class AttendaceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Attendance'),
+        title: const Text('Attendance'),
       ),
       body: Column(
         children: [
