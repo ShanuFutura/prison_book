@@ -15,24 +15,37 @@ class MainPrisonerView extends StatelessWidget {
               context: context,
               builder: (BuildContext ctx) {
                 return Dialog(
-                    child: Wrap(
-                  children: [
-                    DropdownButton(
-                        hint: Text('malicious act type'),
-                        items: const [
-                          DropdownMenuItem(
-                            child: Text('male'),
-                            value: 'male',
-                          ),
-                          DropdownMenuItem(
-                            child: Text('female'),
-                            value: 'female',
-                          )
+                    child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      DropdownButton(
+                          hint: Text('malicious act type'),
+                          items: const [
+                            DropdownMenuItem(
+                              child: Text('male'),
+                              value: 'male',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('female'),
+                              value: 'female',
+                            )
+                          ],
+                          onChanged: (val) {}),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ElevatedButton(onPressed: () {}, child: Text('date')),
+                          IconButton(onPressed: () {}, icon: Icon(Icons.done)),
                         ],
-                        onChanged: (val) {}),
-                    ElevatedButton(onPressed: () {}, child: Text('date')),
-                    IconButton(onPressed: () {}, icon: Icon(Icons.done))
-                  ],
+                      ),
+                    ],
+                  ),
                 ));
               });
         },

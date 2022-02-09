@@ -38,14 +38,34 @@ class PrisonerViewSliverAppbar extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return Dialog(
-                        child: Wrap(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
-                        Text('critical'),
-                        Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
-                        Text('not well'),
-                        Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
-                        Text('healthy'),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
+                            Text('critical'),
+                          ],
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
+                            Text('not well'),
+                          ],
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
+                            Text('healthy'),
+                          ],
+                        ),
                       ],
                     ));
                   });
