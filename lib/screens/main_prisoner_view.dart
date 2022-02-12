@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prisonbook/widgets/prisoner_view_drawer.dart';
 import 'package:prisonbook/widgets/prisoner_view_sliver_appbar.dart';
 
 class MainPrisonerView extends StatelessWidget {
@@ -6,10 +7,52 @@ class MainPrisonerView extends StatelessWidget {
 
   static const String routeName = 'main prisoner view';
 
+  healthDialogCard(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
+                  Text('critical'),
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
+                  Text('not well'),
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
+                  Text('healthy'),
+                ],
+              ),
+            ],
+          ));
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
+      drawer: PrisonerViewDrawer(),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).errorColor,
         onPressed: () {
           showDialog(
               context: context,
@@ -53,7 +96,14 @@ class MainPrisonerView extends StatelessWidget {
       ),
       body: CustomScrollView(slivers: [
         SliverAppBar(
-          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.edit))],
+          actions: [
+            IconButton(
+                onPressed: () {
+                  healthDialogCard(context);
+                },
+                icon: Icon(Icons.health_and_safety)),
+            IconButton(onPressed: () {}, icon: Icon(Icons.edit))
+          ],
           pinned: true,
           expandedHeight: 200,
           flexibleSpace: PrisonerViewSliverAppbar(),
@@ -64,16 +114,96 @@ class MainPrisonerView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('crime'),
-                Text('section'),
-                Row(
-                  children: [Text('entry      '), Text('release')],
+                ListTile(
+                  title: Text('Crime'),
                 ),
-                Text('address'),
+                ListTile(title: Text('Section')),
+                Row(
+                  children: [
+                    Expanded(child: ListTile(title: Text('entry'))),
+                    Expanded(child: ListTile(title: Text('release'))),
+                  ],
+                ),
+                Center(
+                  child: Container(
+                    height: 200,
+                    width: deviceWidth * .95,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color.fromRGBO(255, 255, 255, .2)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('address'),
+                    ),
+                  ),
+                ),
                 Divider(),
-                Text('parol-      start,   end'),
-                Text('transfer      date'),
-                Text('visitors'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Text('Parole'),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text('from'),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 30,
+                            width: 70,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Color.fromRGBO(255, 255, 255, .3)),
+                          ),
+                        ),
+                        Text('to'),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 30,
+                            width: 70,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Color.fromRGBO(255, 255, 255, .3)),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text('Transfer'),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 30,
+                          width: 70,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Color.fromRGBO(255, 255, 255, .3)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    'visitors',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('No visiters...'),
+                )
               ],
             ),
           ),

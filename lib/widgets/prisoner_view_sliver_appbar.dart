@@ -24,59 +24,29 @@ class PrisonerViewSliverAppbar extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('name'),
-              Text('age'),
-              Text('gender'),
-              Text('num'),
-              Text('cell'),
+            children: const [
+              Padding(
+                padding: EdgeInsets.all(7.0),
+                child: Text('name'),
+              ),
+              Padding(
+                padding: EdgeInsets.all(7.0),
+                child: Text('age'),
+              ),
+              Padding(
+                padding: EdgeInsets.all(7.0),
+                child: Text('gender'),
+              ),
+              Padding(
+                padding: EdgeInsets.all(7.0),
+                child: Text('num'),
+              ),
+              Padding(
+                padding: EdgeInsets.all(7.0),
+                child: Text('cell'),
+              ),
             ],
           ),
-          GestureDetector(
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Dialog(
-                        child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
-                            Text('critical'),
-                          ],
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
-                            Text('not well'),
-                          ],
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
-                            Text('healthy'),
-                          ],
-                        ),
-                      ],
-                    ));
-                  });
-            },
-            child: Card(
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Text('health stat'),
-              ),
-            ),
-          )
         ],
       ),
     );

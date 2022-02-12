@@ -56,7 +56,7 @@ class PrisonBook extends StatelessWidget {
       //     bodyText1: TextStyle(color: Colors.white),
       //   ),
       // ),
-      home: LoginPage(),
+      home: HomePage(),
       routes: {
         MainPrisonerView.routeName: (ctx) => MainPrisonerView(),
         ProfileEditScreen.routeName: (ctx) => ProfileEditScreen(),

@@ -56,6 +56,7 @@ class HomePage extends StatelessWidget {
       ),
       drawer: EmployeeDrawer(),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
         onPressed: () =>
             Navigator.of(context).pushNamed(AddPrisonerScreen.routeName),
         child: Icon(Icons.person_add_alt_1),
