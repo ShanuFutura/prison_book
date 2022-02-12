@@ -10,6 +10,8 @@ import 'package:prisonbook/widgets/employee_drawer.dart';
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
+  static const String routeName = 'homepage';
+
   @override
   Widget build(BuildContext context) {
     final fullHeight = MediaQuery.of(context).size.height;
