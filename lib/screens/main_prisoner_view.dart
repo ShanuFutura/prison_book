@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prisonbook/screens/add_prisoner_screen.dart';
 import 'package:prisonbook/widgets/prisoner_view_drawer.dart';
 import 'package:prisonbook/widgets/prisoner_view_sliver_appbar.dart';
 
@@ -45,52 +46,58 @@ class MainPrisonerView extends StatelessWidget {
         });
   }
 
+  maliciouseShowDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return Dialog(
+              child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                DropdownButton(
+                    hint: Text('malicious act type'),
+                    items: const [
+                      DropdownMenuItem(
+                        child: Text('male'),
+                        value: 'male',
+                      ),
+                      DropdownMenuItem(
+                        child: Text('female'),
+                        value: 'female',
+                      )
+                    ],
+                    onChanged: (val) {}),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ElevatedButton(onPressed: () {}, child: Text('date')),
+                    IconButton(onPressed: () {}, icon: Icon(Icons.done)),
+                  ],
+                ),
+              ],
+            ),
+          ));
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      drawer: PrisonerViewDrawer(),
+      drawer: PrisonerViewDrawer(
+        maliciousFn: maliciouseShowDialog,
+        prisonerHealthFn: healthDialogCard,
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).errorColor,
         onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext ctx) {
-                return Dialog(
-                    child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      DropdownButton(
-                          hint: Text('malicious act type'),
-                          items: const [
-                            DropdownMenuItem(
-                              child: Text('male'),
-                              value: 'male',
-                            ),
-                            DropdownMenuItem(
-                              child: Text('female'),
-                              value: 'female',
-                            )
-                          ],
-                          onChanged: (val) {}),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ElevatedButton(onPressed: () {}, child: Text('date')),
-                          IconButton(onPressed: () {}, icon: Icon(Icons.done)),
-                        ],
-                      ),
-                    ],
-                  ),
-                ));
-              });
+          maliciouseShowDialog(context);
         },
         child: Icon(Icons.report),
       ),
@@ -102,7 +109,11 @@ class MainPrisonerView extends StatelessWidget {
                   healthDialogCard(context);
                 },
                 icon: Icon(Icons.health_and_safety)),
-            IconButton(onPressed: () {}, icon: Icon(Icons.edit))
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(AddPrisonerScreen.routeName);
+                },
+                icon: Icon(Icons.edit))
           ],
           pinned: true,
           expandedHeight: 200,
