@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:prisonbook/screens/employees_list_screen.dart';
-import 'package:prisonbook/screens/officers_list_screen.dart';
-import 'package:prisonbook/screens/profile_edit_screen.dart';
+import 'package:prisonbook/employee_screens/employees_list_screen.dart';
+import 'package:prisonbook/employee_screens/officers_list_screen.dart';
+import 'package:prisonbook/employee_screens/profile_edit_screen.dart';
+// import 'package:prisonbook/screens/employees_list_screen.dart';
+// import 'package:prisonbook/screens/officers_list_screen.dart';
+// import 'package:prisonbook/screens/profile_edit_screen.dart';
 
 class EmployeeDrawer extends StatelessWidget {
   const EmployeeDrawer({Key? key}) : super(key: key);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prisonbook/screens/add_prisoner_screen.dart';
+import 'package:prisonbook/employee_screens/add_prisoner_screen.dart';
+// import 'package:prisonbook/screens/add_prisoner_screen.dart';
 
 class PrisonerViewDrawer extends StatelessWidget {
   final Function maliciousFn;

@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:prisonbook/screens/add_prisoner_screen.dart';
-import 'package:prisonbook/screens/attendance_screen.dart';
-import 'package:prisonbook/screens/employees_list_screen.dart';
-import 'package:prisonbook/screens/home_page.dart';
-import 'package:prisonbook/screens/login_page.dart';
-import 'package:prisonbook/screens/main_prisoner_view.dart';
-import 'package:prisonbook/screens/officers_list_screen.dart';
-
-import 'package:prisonbook/screens/profile_edit_screen.dart';
+import 'package:prisonbook/employee_screens/add_prisoner_screen.dart';
+import 'package:prisonbook/employee_screens/attendance_screen.dart';
+import 'package:prisonbook/employee_screens/employees_list_screen.dart';
+import 'package:prisonbook/employee_screens/home_page.dart';
+import 'package:prisonbook/employee_screens/login_page.dart';
+import 'package:prisonbook/employee_screens/main_prisoner_view.dart';
+import 'package:prisonbook/employee_screens/officers_list_screen.dart';
+import 'package:prisonbook/employee_screens/profile_edit_screen.dart';
 
 main() => runApp(PrisonBook());
 
 class PrisonBook extends StatelessWidget {
-  final copBlue = Color.fromRGBO(52, 51, 82, 1);
+  final copBlue = Color.fromARGB(255, 53, 51, 117);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
