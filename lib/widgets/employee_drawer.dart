@@ -15,13 +15,13 @@ class EmployeeDrawer extends StatelessWidget {
           Container(
             width: double.infinity,
             height: 250,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
                   Colors.indigo,
-                  Colors.white,
+                  Theme.of(context).canvasColor,
                 ])),
             child: Center(
               child: Column(
@@ -51,24 +51,27 @@ class EmployeeDrawer extends StatelessWidget {
               ),
             ),
           ),
+          Divider(),
           ListTile(
+            onTap: () =>
+                Navigator.of(context).pushNamed(EmployeesListScreen.routeName),
             title: Text('View Employees'),
-            trailing: IconButton(
-                onPressed: () => Navigator.of(context)
-                    .pushNamed(EmployeesListScreen.routeName),
-                icon: Icon(Icons.reorder)),
+            trailing: Icon(Icons.reorder),
           ),
+          Divider(),
           ListTile(
+            onTap: () =>
+                Navigator.of(context).pushNamed(OfficersListScreen.routeName),
             title: Text('officers'),
-            trailing: IconButton(
-                onPressed: () => Navigator.of(context)
-                    .pushNamed(OfficersListScreen.routeName),
-                icon: Icon(Icons.chat)),
+            trailing: Icon(Icons.chat),
           ),
+          Divider(),
           ListTile(
+            onTap: () {},
             title: Text('feedback'),
-            trailing: IconButton(onPressed: () {}, icon: Icon(Icons.chat)),
+            trailing: Icon(Icons.chat),
           ),
+          Divider(),
         ],
       ),
     );

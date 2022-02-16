@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DummyDatas {
+  static final prisonData = [];
   static final ListTileList = [
     ListTile(
       leading: CircleAvatar(),

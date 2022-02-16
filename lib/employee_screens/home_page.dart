@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-// import 'package:prisonbook/models/dummyDatas.dart';
-import 'package:prisonbook/screens/add_prisoner_screen.dart';
-import 'package:prisonbook/screens/attendance_screen.dart';
-import 'package:prisonbook/screens/main_prisoner_view.dart';
-import 'package:prisonbook/screens/officers_list_screen.dart';
-// import 'package:prisonbook/screens/prison_view_page.dart';
+import 'package:prisonbook/employee_screens/add_prisoner_screen.dart';
+import 'package:prisonbook/employee_screens/attendance_screen.dart';
+import 'package:prisonbook/employee_screens/main_prisoner_view.dart';
+import 'package:prisonbook/employee_screens/officers_list_screen.dart';
+
+// import 'package:prisonbook/screens/add_prisoner_screen.dart';
+// import 'package:prisonbook/screens/attendance_screen.dart';
+// import 'package:prisonbook/screens/main_prisoner_view.dart';
+// import 'package:prisonbook/screens/officers_list_screen.dart';
+
 import 'package:prisonbook/widgets/employee_drawer.dart';
 
 class HomePage extends StatelessWidget {
@@ -15,6 +19,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fullHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -22,12 +27,14 @@ class HomePage extends StatelessWidget {
             flexibleSpace: FlexibleSpaceBar(
               title: Text('Project Name'),
               background: Stack(
+                alignment: Alignment.center,
                 children: [
                   Container(
-                    height: 500,
-                    child: Image.asset(
-                      'assets/prison_vector.jpg',
-                      fit: BoxFit.cover,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage('assets/prison_vector.jpg'),
+                      ),
                     ),
                   ),
                   Container(
@@ -37,14 +44,14 @@ class HomePage extends StatelessWidget {
                             end: Alignment.bottomCenter,
                             colors: [
                           Color.fromRGBO(0, 0, 0, 0),
-                          Color.fromRGBO(48, 48, 48, 1)
+                          Theme.of(context).canvasColor
                         ])),
                   )
                 ],
               ),
             ),
             pinned: true,
-            expandedHeight: 200,
+            expandedHeight: fullHeight * .27,
             actions: [
               IconButton(
                   onPressed: () => Navigator.of(context)

@@ -13,8 +13,28 @@ class PrisonerViewDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
-          Container(
-            height: 300,
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Image.asset(
+                'assets/prison_vector.jpg',
+                fit: BoxFit.fitWidth,
+              ),
+              Container(
+                height: 200,
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withOpacity(0),
+                      Theme.of(context).canvasColor
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
           Divider(),
           ListTile(
