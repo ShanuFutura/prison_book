@@ -62,7 +62,7 @@ class LoginPage extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(HomePage.routeName);
+                  Navigator.of(context).pushNamed(EmployeeHomePage.routeName);
                 },
                 child: Container(
                   height: 50,

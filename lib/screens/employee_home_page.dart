@@ -16,8 +16,8 @@ import 'package:prisonbook/screens/officers_list_screen.dart';
 import 'package:prisonbook/widgets/employee_drawer.dart';
 import 'package:prisonbook/widgets/prisons_list_view.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class EmployeeHomePage extends StatelessWidget {
+  const EmployeeHomePage({Key? key}) : super(key: key);
 
   static const String routeName = 'homepage';
 

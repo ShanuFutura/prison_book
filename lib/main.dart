@@ -27,7 +27,7 @@ class PrisonBook extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark(),
-      home: OfficerHomePage(),
+      home: EmployeeHomePage(),
       routes: {
         MainPrisonerView.routeName: (ctx) => MainPrisonerView(),
         ProfileEditScreen.routeName: (ctx) => ProfileEditScreen(),
