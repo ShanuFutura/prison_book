@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:prisonbook/employee_screens/add_prisoner_screen.dart';
-import 'package:prisonbook/employee_screens/attendance_screen.dart';
-import 'package:prisonbook/employee_screens/main_prisoner_view.dart';
-import 'package:prisonbook/employee_screens/officers_list_screen.dart';
+// import 'package:prisonbook/employee_screens/add_prisoner_screen.dart';
+// import 'package:prisonbook/employee_screens/attendance_screen.dart';
+import 'package:prisonbook/screens/add_prisoner_screen.dart';
+import 'package:prisonbook/screens/attendance_screen.dart';
+import 'package:prisonbook/screens/main_prisoner_view.dart';
+import 'package:prisonbook/screens/officers_list_screen.dart';
+// import 'package:prisonbook/employee_screens/main_prisoner_view.dart';
+// import 'package:prisonbook/employee_screens/officers_list_screen.dart';
 
 // import 'package:prisonbook/screens/add_prisoner_screen.dart';
 // import 'package:prisonbook/screens/attendance_screen.dart';
@@ -10,6 +14,7 @@ import 'package:prisonbook/employee_screens/officers_list_screen.dart';
 // import 'package:prisonbook/screens/officers_list_screen.dart';
 
 import 'package:prisonbook/widgets/employee_drawer.dart';
+import 'package:prisonbook/widgets/prisons_list_view.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -64,25 +69,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
           SliverFillRemaining(
-            child: ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 12,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: AssetImage('assets/avatar.png'),
-                    ),
-                    title: Text('Prisoner Name'),
-                    subtitle: Text('prisoner number'),
-                    trailing: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pushNamed(MainPrisonerView.routeName);
-                        },
-                        child: Text('View')),
-                  );
-                }),
+            child: PrisonsListView(),
           )
         ],
       ),

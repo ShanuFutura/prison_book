@@ -1,78 +1,126 @@
 import 'package:flutter/material.dart';
+import 'package:prisonbook/screens/attendance_screen.dart';
+import 'package:prisonbook/screens/employees_list_screen.dart';
+import 'package:prisonbook/screens/malicious_activity_screen.dart';
+import 'package:prisonbook/screens/officer_attendance_view.dart';
+// import 'package:flutter/widgets.dart';
+import 'package:prisonbook/widgets/officer_drawer.dart';
+import 'package:prisonbook/widgets/prisons_list_view.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class OfficerHomePage extends StatelessWidget {
+  const OfficerHomePage({Key? key}) : super(key: key);
+  static const String routeName = 'officerhome page';
 
   @override
   Widget build(BuildContext context) {
-    final fullHeight = MediaQuery.of(context).size.height;
-
+    var fullHeight =
+        MediaQuery.of(context).size.height - AppBar().preferredSize.height;
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text('Project Name'),
-              background: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/prison_vector.jpg'),
+      drawer: OfficerDrawer(),
+      appBar: AppBar(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            height: fullHeight * .3,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context)
+                            .pushNamed(EmployeesListScreen.routeName);
+                      },
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          color: Color.fromARGB(255, 122, 122, 122),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.badge,
+                              size: 50,
+                            ),
+                            Text(
+                              'Employees',
+                              style: TextStyle(fontSize: 19),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                          Color.fromRGBO(0, 0, 0, 0),
-                          Theme.of(context).canvasColor
-                        ])),
-                  )
-                ],
-              ),
-            ),
-            pinned: true,
-            expandedHeight: fullHeight * .27,
-            actions: [
-              IconButton(
-                  onPressed: () {},
-                  // => Navigator.of(context)
-                  //     .pushNamed(AttendaceScreen.routeName),
-                  icon: Icon(Icons.event)),
-              IconButton(
-                  onPressed: () {},
-                  // => Navigator.of(context)
-                  //     .pushNamed(OfficersListScreen.routeName),
-                  icon: Icon(Icons.local_police)),
-            ],
-          ),
-          SliverFillRemaining(
-            child: ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 12,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: AssetImage('assets/avatar.png'),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context)
+                            .pushNamed(MaliciousActivityListScreen.routeName);
+                      },
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          color: Color.fromARGB(255, 122, 122, 122),
+                        ),
+                        // color: Color.fromARGB(255, 70, 244, 54),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.report,
+                              size: 50,
+                            ),
+                            Text(
+                              'Malicious activity',
+                              style: TextStyle(fontSize: 19),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    title: Text('Prisoner Name'),
-                    subtitle: Text('prisoner number'),
-                    trailing: ElevatedButton(
-                        onPressed: () {
-                          // Navigator.of(context)
-                          //     .pushNamed(MainPrisonerView.routeName);
-                        },
-                        child: Text('View')),
-                  );
-                }),
-          )
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context)
+                            .pushNamed(OfficerAttendanceView.routeName);
+                      },
+                      child: Container(
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            color: Color.fromARGB(255, 122, 122, 122)),
+                        // color: Color.fromARGB(255, 105, 54, 244),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.calendar_today,
+                              size: 50,
+                            ),
+                            Text(
+                              'Attendance',
+                              style: TextStyle(fontSize: 19),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Container(height: fullHeight * .65, child: PrisonsListView()),
         ],
       ),
     );

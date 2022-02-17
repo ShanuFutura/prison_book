@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:prisonbook/employee_screens/add_prisoner_screen.dart';
-// import 'package:prisonbook/screens/add_prisoner_screen.dart';
+
+import 'package:prisonbook/screens/add_prisoner_screen.dart';
+
 import 'package:prisonbook/widgets/prisoner_view_drawer.dart';
 import 'package:prisonbook/widgets/prisoner_view_sliver_appbar.dart';
 

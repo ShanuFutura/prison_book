@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-class ProfileEditScreen extends StatefulWidget {
-  const ProfileEditScreen({Key? key}) : super(key: key);
+class OfficerProfileEditScreen extends StatefulWidget {
+  const OfficerProfileEditScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProfileEditScreen> createState() => _ProfileEditScreenState();
-  static const String routeName = 'Profile Edit screen';
+  State<OfficerProfileEditScreen> createState() =>
+      _OfficerProfileEditScreenState();
+  static const String routeName = 'Officer Profile Edit screen';
 }
 
-class _ProfileEditScreenState extends State<ProfileEditScreen> {
+class _OfficerProfileEditScreenState extends State<OfficerProfileEditScreen> {
   var _gender = '';
 
   Widget greyContainerBuilder(Widget child) {

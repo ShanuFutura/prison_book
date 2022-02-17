@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:prisonbook/employee_screens/add_prisoner_screen.dart';
-import 'package:prisonbook/employee_screens/attendance_screen.dart';
-import 'package:prisonbook/employee_screens/employees_list_screen.dart';
-import 'package:prisonbook/employee_screens/home_page.dart';
-import 'package:prisonbook/employee_screens/login_page.dart';
-import 'package:prisonbook/employee_screens/main_prisoner_view.dart';
-import 'package:prisonbook/employee_screens/officers_list_screen.dart';
-import 'package:prisonbook/employee_screens/profile_edit_screen.dart';
+
+// import 'package:prisonbook/employee_screens/attendance_screen.dart';
+
+import 'package:prisonbook/screens/add_prisoner_screen.dart';
+import 'package:prisonbook/screens/attendance_screen.dart';
+import 'package:prisonbook/screens/employee_home_page.dart';
+import 'package:prisonbook/screens/employees_list_screen.dart';
+import 'package:prisonbook/screens/feedback_screen.dart';
+import 'package:prisonbook/screens/login_page.dart';
+import 'package:prisonbook/screens/main_prisoner_view.dart';
+import 'package:prisonbook/screens/malicious_activity_screen.dart';
+import 'package:prisonbook/screens/officer_attendance_view.dart';
+import 'package:prisonbook/screens/officer_home_page.dart';
+import 'package:prisonbook/screens/officer_profile_edit_screen.dart';
+// import 'package:prisonbook/screens/officer_home_page.dart';
+import 'package:prisonbook/screens/officers_list_screen.dart';
+import 'package:prisonbook/screens/parol_list.dart';
+import 'package:prisonbook/screens/profile_edit_screen.dart';
+import 'package:prisonbook/widgets/prisons_list_view.dart';
 
 main() => runApp(PrisonBook());
 
@@ -16,7 +27,7 @@ class PrisonBook extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark(),
-      home: HomePage(),
+      home: OfficerHomePage(),
       routes: {
         MainPrisonerView.routeName: (ctx) => MainPrisonerView(),
         ProfileEditScreen.routeName: (ctx) => ProfileEditScreen(),
@@ -25,7 +36,14 @@ class PrisonBook extends StatelessWidget {
         EmployeesListScreen.routeName: (ctx) => EmployeesListScreen(),
         OfficersListScreen.routeName: (ctx) => OfficersListScreen(),
         LoginPage.routeName: (ctx) => LoginPage(),
-        HomePage.routeName: (ctx) => HomePage(),
+        OfficerHomePage.routeName: (ctx) => OfficerHomePage(),
+        EmployeesListScreen.routeName: (ctx) => EmployeesListScreen(),
+        OfficerProfileEditScreen.routeName: (ctx) => OfficerProfileEditScreen(),
+        OfficerAttendanceView.routeName: (ctx) => OfficerAttendanceView(),
+        MaliciousActivityListScreen.routeName: (ctx) =>
+            MaliciousActivityListScreen(),
+        ParolList.routeName: (ctx) => ParolList(),
+        FeedBackScreen.routeName: (ctx) => FeedBackScreen(),
       },
     );
   }
