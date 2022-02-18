@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:prisonbook/models/db_helper.dart';
+import 'package:prisonbook/screens/attendance_screen.dart';
 import 'package:prisonbook/screens/employees_list_screen.dart';
+import 'package:prisonbook/screens/feedback_screen.dart';
 import 'package:prisonbook/screens/officers_list_screen.dart';
 import 'package:prisonbook/screens/profile_edit_screen.dart';
 import 'package:provider/provider.dart';
@@ -73,13 +75,29 @@ class EmployeeDrawer extends StatelessWidget {
             onTap: () =>
                 Navigator.of(context).pushNamed(OfficersListScreen.routeName),
             title: Text('officers'),
+            trailing: Icon(Icons.local_police),
+          ),
+          Divider(),
+          ListTile(
+            onTap: () {
+              Navigator.of(context).pushNamed(FeedBackScreen.routeName);
+            },
+            title: Text('feedback'),
             trailing: Icon(Icons.chat),
           ),
           Divider(),
           ListTile(
+            onTap: () {
+              Navigator.of(context).pushNamed(AttendaceScreen.routeName);
+            },
+            title: Text('Attendance'),
+            trailing: Icon(Icons.event),
+          ),
+          Divider(),
+          ListTile(
             onTap: () {},
-            title: Text('feedback'),
-            trailing: Icon(Icons.chat),
+            title: Text('Critical health prisoners'),
+            trailing: Icon(Icons.medical_services),
           ),
           Divider(),
           ListTile(

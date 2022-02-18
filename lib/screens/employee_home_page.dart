@@ -59,8 +59,38 @@ class EmployeeHomePage extends StatelessWidget {
             expandedHeight: fullHeight * .27,
             actions: [
               IconButton(
-                  onPressed: () => Navigator.of(context)
-                      .pushNamed(AttendaceScreen.routeName),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            child: Padding(
+                              padding: const EdgeInsets.all(40.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  print('object');
+                                },
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Padding(
+                                      padding: EdgeInsets.all(20.0),
+                                      child: Icon(
+                                        Icons.verified,
+                                        size: 60,
+                                      ),
+                                    ),
+                                    Text('Punch in'),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        });
+                  },
+                  // () => Navigator.of(context)
+                  //     .pushNamed(AttendaceScreen.routeName),
                   icon: Icon(Icons.event)),
               IconButton(
                   onPressed: () => Navigator.of(context)

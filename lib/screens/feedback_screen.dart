@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:prisonbook/models/db_helper.dart';
+import 'package:provider/provider.dart';
 
 class FeedBackScreen extends StatelessWidget {
-  const FeedBackScreen({Key? key}) : super(key: key);
+  FeedBackScreen({Key? key}) : super(key: key);
 
   static const String routeName = 'feedback screen';
+
+  final feedController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +24,7 @@ class FeedBackScreen extends StatelessWidget {
               color: Colors.grey.withOpacity(.5),
               padding: EdgeInsets.all(5),
               child: TextField(
+                controller: feedController,
                 maxLines: 15,
               ),
             ),
@@ -26,7 +32,12 @@ class FeedBackScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Provider.of<DBHelper>(context, listen: false)
+              .feedBackSend(feedController.text);
+          feedController.clear();
+          Fluttertoast.showToast(msg: 'feedback sent');
+        },
         child: Icon(Icons.send),
       ),
     );

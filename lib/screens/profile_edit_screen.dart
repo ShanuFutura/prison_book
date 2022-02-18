@@ -20,12 +20,16 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   bool isLoading = false;
   File? _storedImage;
   final formKey = GlobalKey<FormState>();
+  var name, address, age, gender, phone, email;
 
   Widget greyContainerBuilder(Widget child) {
-    return Container(
-      color: Colors.black.withOpacity(.1),
-      padding: EdgeInsets.all(5),
-      child: child,
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Container(
+        color: Colors.black.withOpacity(.1),
+        padding: EdgeInsets.all(5),
+        child: child,
+      ),
     );
   }
 
@@ -81,6 +85,17 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           });
     }
     formKey.currentState!.validate();
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+      Provider.of<DBHelper>(context, listen: false).employeeProfileEdit(
+        name,
+        age,
+        address,
+        _gender,
+        phone,
+        email,
+      );
+    }
   }
 
   @override
@@ -101,25 +116,28 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    CircleAvatar(
-                      radius: 80,
-                      backgroundImage: profileImage == null
-                          ? AssetImage('assets/avatar.png') as ImageProvider
-                          : FileImage(profileImage),
-                    ),
-                    CircleAvatar(
-                        backgroundColor: Colors.grey,
-                        child: IconButton(
-                            onPressed: () {
-                              _takePicture(context);
-                            },
-                            icon: Icon(Icons.edit))),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      CircleAvatar(
+                        radius: 80,
+                        backgroundImage: profileImage == null
+                            ? AssetImage('assets/avatar.png') as ImageProvider
+                            : FileImage(profileImage),
+                      ),
+                      CircleAvatar(
+                          backgroundColor: Colors.grey,
+                          child: IconButton(
+                              onPressed: () {
+                                _takePicture(context);
+                              },
+                              icon: Icon(Icons.edit))),
+                    ],
+                  ),
                 ),
                 greyContainerBuilder(
                   TextFormField(
@@ -132,6 +150,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         return 'enter a valid name';
                       }
                     },
+                    onSaved: (v) {
+                      name = v;
+                    },
                   ),
                 ),
                 greyContainerBuilder(
@@ -143,6 +164,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       if (v!.trim().isEmpty) {
                         return 'enter addrenss';
                       }
+                    },
+                    onSaved: (v) {
+                      address = v;
                     },
                   ),
                 ),
@@ -162,6 +186,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           } else if (int.parse(v) > 120 || int.parse(v) < 0) {
                             return 'enter valid age';
                           }
+                        },
+                        onSaved: (v) {
+                          age = v;
                         },
                       ),
                     ),
@@ -198,6 +225,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         return 'enter valid phone number';
                       }
                     },
+                    onSaved: (v) {
+                      phone = v;
+                    },
                     decoration: InputDecoration(
                       label: Text('phone'),
                     ),
@@ -215,6 +245,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           v.contains(' ')) {
                         return 'email is badly formatted';
                       }
+                    },
+                    onSaved: (v) {
+                      email = v;
                     },
                   ),
                 ),

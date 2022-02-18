@@ -49,7 +49,7 @@ class PrisonBook extends StatelessWidget {
           OfficersListScreen.routeName: (ctx) => OfficersListScreen(),
           LoginPage.routeName: (ctx) => LoginPage(),
           OfficerHomePage.routeName: (ctx) => OfficerHomePage(),
-          EmployeesListScreen.routeName: (ctx) => EmployeesListScreen(),
+          // EmployeesListScreen.routeName: (ctx) => EmployeesListScreen(),
           OfficerProfileEditScreen.routeName: (ctx) =>
               OfficerProfileEditScreen(),
           OfficerAttendanceView.routeName: (ctx) => OfficerAttendanceView(),
