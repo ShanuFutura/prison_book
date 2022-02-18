@@ -82,6 +82,14 @@ class EmployeeDrawer extends StatelessWidget {
             trailing: Icon(Icons.chat),
           ),
           Divider(),
+          ListTile(
+            onTap: () {
+              // Provider.of<DBHelper>(context).toggleTheme();
+            },
+            title: Text('theme'),
+            trailing: Icon(Icons.nightlight),
+          ),
+          Divider(),
         ],
       ),
     );

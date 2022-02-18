@@ -20,6 +20,8 @@ import 'package:prisonbook/screens/parol_list.dart';
 import 'package:prisonbook/screens/profile_edit_screen.dart';
 import 'package:prisonbook/widgets/prisons_list_view.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferance/';
 
 main() => runApp(PrisonBook());
 
@@ -27,8 +29,14 @@ class PrisonBook extends StatelessWidget {
   final copBlue = Color.fromARGB(255, 53, 51, 117);
   @override
   Widget build(BuildContext context) {
+    // Future<bool> getTheme() async {
+    //   final pref = await SharedPreferences.getInstance();
+    //   return pref.getBool('isDark') ?? false;
+    // }
+
     return ChangeNotifierProvider(
       create: (context) => DBHelper(),
+      // builder: (context){},
       child: MaterialApp(
         theme: ThemeData.dark(),
         home: EmployeeHomePage(),
