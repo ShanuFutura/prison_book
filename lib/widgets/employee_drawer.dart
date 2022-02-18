@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:prisonbook/models/db_helper.dart';
 import 'package:prisonbook/screens/employees_list_screen.dart';
 import 'package:prisonbook/screens/officers_list_screen.dart';
 import 'package:prisonbook/screens/profile_edit_screen.dart';
+import 'package:provider/provider.dart';
 // import 'package:prisonbook/employee_screens/employees_list_screen.dart';
 // import 'package:prisonbook/employee_screens/officers_list_screen.dart';
 // import 'package:prisonbook/employee_screens/profile_edit_screen.dart';
@@ -14,6 +18,7 @@ class EmployeeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var profileImage = Provider.of<DBHelper>(context).getProfileImage();
     return Drawer(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: Column(
@@ -34,12 +39,11 @@ class EmployeeDrawer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Stack(alignment: Alignment.bottomRight, children: [
-                    const CircleAvatar(
-                      radius: 80,
-                      backgroundImage: AssetImage(
-                        'assets/avatar.png',
-                      ),
-                    ),
+                    CircleAvatar(
+                        radius: 80,
+                        backgroundImage: profileImage == null
+                            ? AssetImage('assets/avatar.png') as ImageProvider
+                            : FileImage(profileImage)),
                     GestureDetector(
                       onTap: () => Navigator.of(context)
                           .pushNamed(ProfileEditScreen.routeName),

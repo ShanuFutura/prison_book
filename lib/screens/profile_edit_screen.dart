@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:prisonbook/models/db_helper.dart';
+import 'package:provider/provider.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({Key? key}) : super(key: key);
@@ -14,10 +16,9 @@ class ProfileEditScreen extends StatefulWidget {
 }
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
-  var _gender = '';
+  var _gender;
   bool isLoading = false;
   File? _storedImage;
-
   Widget greyContainerBuilder(Widget child) {
     return Container(
       color: Colors.black.withOpacity(.1),
@@ -44,6 +45,11 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       // isLoading = false;
       _storedImage = File(imageFile.path);
     });
+    if (_storedImage != null) {
+      Provider.of<DBHelper>(context, listen: false).profileImage =
+          _storedImage!;
+    }
+
     // final appDir = await getApplicationDocumentsDirectory();
 
     // final fileName = basename(imageFile.path);
@@ -64,6 +70,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    File? profileImage = Provider.of<DBHelper>(context).getProfileImage();
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       appBar: AppBar(),
@@ -74,19 +81,21 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Stack(
+                alignment: Alignment.bottomRight,
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 80,
-                    backgroundImage: 
-                    _storedImage==null?
-                    AssetImage(
-                      
-                      'assets/avatar.png',
-                    ),
+                    backgroundImage: profileImage == null
+                        ? AssetImage('assets/avatar.png') as ImageProvider
+                        : FileImage(profileImage),
                   ),
                   CircleAvatar(
-                      child:
-                          IconButton(onPressed: () {}, icon: Icon(Icons.edit))),
+                      backgroundColor: Colors.grey,
+                      child: IconButton(
+                          onPressed: () {
+                            _takePicture(context);
+                          },
+                          icon: Icon(Icons.edit))),
                 ],
               ),
               greyContainerBuilder(

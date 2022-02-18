@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prisonbook/models/db_helper.dart';
 
 // import 'package:prisonbook/employee_screens/attendance_screen.dart';
 
@@ -18,6 +19,7 @@ import 'package:prisonbook/screens/officers_list_screen.dart';
 import 'package:prisonbook/screens/parol_list.dart';
 import 'package:prisonbook/screens/profile_edit_screen.dart';
 import 'package:prisonbook/widgets/prisons_list_view.dart';
+import 'package:provider/provider.dart';
 
 main() => runApp(PrisonBook());
 
@@ -25,26 +27,30 @@ class PrisonBook extends StatelessWidget {
   final copBlue = Color.fromARGB(255, 53, 51, 117);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark(),
-      home: EmployeeHomePage(),
-      routes: {
-        MainPrisonerView.routeName: (ctx) => MainPrisonerView(),
-        ProfileEditScreen.routeName: (ctx) => ProfileEditScreen(),
-        AttendaceScreen.routeName: (ctx) => AttendaceScreen(),
-        AddPrisonerScreen.routeName: (ctx) => AddPrisonerScreen(),
-        EmployeesListScreen.routeName: (ctx) => EmployeesListScreen(),
-        OfficersListScreen.routeName: (ctx) => OfficersListScreen(),
-        LoginPage.routeName: (ctx) => LoginPage(),
-        OfficerHomePage.routeName: (ctx) => OfficerHomePage(),
-        EmployeesListScreen.routeName: (ctx) => EmployeesListScreen(),
-        OfficerProfileEditScreen.routeName: (ctx) => OfficerProfileEditScreen(),
-        OfficerAttendanceView.routeName: (ctx) => OfficerAttendanceView(),
-        MaliciousActivityListScreen.routeName: (ctx) =>
-            MaliciousActivityListScreen(),
-        ParolList.routeName: (ctx) => ParolList(),
-        FeedBackScreen.routeName: (ctx) => FeedBackScreen(),
-      },
+    return ChangeNotifierProvider(
+      create: (context) => DBHelper(),
+      child: MaterialApp(
+        theme: ThemeData.dark(),
+        home: EmployeeHomePage(),
+        routes: {
+          MainPrisonerView.routeName: (ctx) => MainPrisonerView(),
+          ProfileEditScreen.routeName: (ctx) => ProfileEditScreen(),
+          AttendaceScreen.routeName: (ctx) => AttendaceScreen(),
+          AddPrisonerScreen.routeName: (ctx) => AddPrisonerScreen(),
+          EmployeesListScreen.routeName: (ctx) => EmployeesListScreen(),
+          OfficersListScreen.routeName: (ctx) => OfficersListScreen(),
+          LoginPage.routeName: (ctx) => LoginPage(),
+          OfficerHomePage.routeName: (ctx) => OfficerHomePage(),
+          EmployeesListScreen.routeName: (ctx) => EmployeesListScreen(),
+          OfficerProfileEditScreen.routeName: (ctx) =>
+              OfficerProfileEditScreen(),
+          OfficerAttendanceView.routeName: (ctx) => OfficerAttendanceView(),
+          MaliciousActivityListScreen.routeName: (ctx) =>
+              MaliciousActivityListScreen(),
+          ParolList.routeName: (ctx) => ParolList(),
+          FeedBackScreen.routeName: (ctx) => FeedBackScreen(),
+        },
+      ),
     );
   }
 }
