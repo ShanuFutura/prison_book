@@ -7,15 +7,16 @@ import 'package:path_provider/path_provider.dart';
 import 'package:prisonbook/models/db_helper.dart';
 import 'package:provider/provider.dart';
 
-class ProfileEditScreen extends StatefulWidget {
-  const ProfileEditScreen({Key? key}) : super(key: key);
+class EmployeeProfileEditScreen extends StatefulWidget {
+  const EmployeeProfileEditScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProfileEditScreen> createState() => _ProfileEditScreenState();
+  State<EmployeeProfileEditScreen> createState() =>
+      _EmployeeProfileEditScreenState();
   static const String routeName = 'Profile Edit screen';
 }
 
-class _ProfileEditScreenState extends State<ProfileEditScreen> {
+class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
   var _gender;
   bool isLoading = false;
   File? _storedImage;
@@ -52,7 +53,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       _storedImage = File(imageFile.path);
     });
     if (_storedImage != null) {
-      Provider.of<DBHelper>(context, listen: false).profileImage =
+      Provider.of<DBHelper>(context, listen: false).EmployeeProfileImage =
           _storedImage!;
     }
 
@@ -100,7 +101,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    File? profileImage = Provider.of<DBHelper>(context).getProfileImage();
+    File? profileImage =
+        Provider.of<DBHelper>(context).getEmployeeProfileImage();
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(

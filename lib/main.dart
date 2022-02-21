@@ -17,7 +17,7 @@ import 'package:prisonbook/screens/officer_profile_edit_screen.dart';
 // import 'package:prisonbook/screens/officer_home_page.dart';
 import 'package:prisonbook/screens/officers_list_screen.dart';
 import 'package:prisonbook/screens/parol_list.dart';
-import 'package:prisonbook/screens/profile_edit_screen.dart';
+import 'package:prisonbook/screens/employee_profile_edit_screen.dart';
 import 'package:prisonbook/widgets/prisons_list_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,10 +39,11 @@ class PrisonBook extends StatelessWidget {
       // builder: (context){},
       child: MaterialApp(
         theme: ThemeData.dark(),
-        home: EmployeeHomePage(),
+        home: OfficerHomePage(),
         routes: {
           MainPrisonerView.routeName: (ctx) => MainPrisonerView(),
-          ProfileEditScreen.routeName: (ctx) => ProfileEditScreen(),
+          EmployeeProfileEditScreen.routeName: (ctx) =>
+              EmployeeProfileEditScreen(),
           AttendaceScreen.routeName: (ctx) => AttendaceScreen(),
           AddPrisonerScreen.routeName: (ctx) => AddPrisonerScreen(),
           EmployeesListScreen.routeName: (ctx) => EmployeesListScreen(),

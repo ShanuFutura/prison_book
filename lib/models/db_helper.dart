@@ -3,10 +3,17 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 
 class DBHelper extends ChangeNotifier {
-  File? profileImage;
+  File? EmployeeProfileImage;
 
-  File? getProfileImage() {
-    return profileImage;
+  File? officerProfileImage;
+
+  File? getEmployeeProfileImage() {
+    return EmployeeProfileImage;
+  }
+
+  File? getOfficerProfileImage() {
+    // notifyListeners();
+    return officerProfileImage;
   }
 
   loginFn(String username, String password) {

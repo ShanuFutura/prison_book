@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:prisonbook/models/db_helper.dart';
 import 'package:prisonbook/screens/employees_list_screen.dart';
 import 'package:prisonbook/screens/feedback_screen.dart';
 import 'package:prisonbook/screens/officer_attendance_view.dart';
-import 'package:prisonbook/screens/officer_home_page.dart';
+// import 'package:prisonbook/screens/officer_home_page.dart';
 import 'package:prisonbook/screens/officer_profile_edit_screen.dart';
 import 'package:prisonbook/screens/parol_list.dart';
+import 'package:provider/provider.dart';
 // import 'package:prisonbook/widgets/employee_list.dart';
 
 class OfficerDrawer extends StatelessWidget {
@@ -12,6 +16,8 @@ class OfficerDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    File? profileImage =
+        Provider.of<DBHelper>(context).getOfficerProfileImage();
     return Drawer(
       child: Column(
         children: [
@@ -25,7 +31,12 @@ class OfficerDrawer extends StatelessWidget {
                   alignment: Alignment.bottomRight,
                   children: [
                     CircleAvatar(
-                      radius: 100,
+                      radius: 80,
+                      backgroundImage: profileImage != null
+                          ? FileImage(profileImage) as ImageProvider
+                          : AssetImage(
+                              'assets/avatar.png',
+                            ),
                     ),
                     CircleAvatar(
                       backgroundColor: Colors.grey,
@@ -33,6 +44,7 @@ class OfficerDrawer extends StatelessWidget {
                       child: IconButton(
                         icon: Icon(Icons.edit),
                         onPressed: () {
+                          Navigator.of(context).pop();
                           Navigator.of(context)
                               .pushNamed(OfficerProfileEditScreen.routeName);
                         },
@@ -49,6 +61,7 @@ class OfficerDrawer extends StatelessWidget {
             trailing: Icon(Icons.badge),
             onTap: () {
               Navigator.of(context).pushNamed(EmployeesListScreen.routeName);
+              Navigator.of(context).pop();
             },
           ),
           Divider(),
@@ -57,6 +70,7 @@ class OfficerDrawer extends StatelessWidget {
             trailing: Icon(Icons.calendar_today),
             onTap: () {
               Navigator.of(context).pushNamed(OfficerAttendanceView.routeName);
+              Navigator.of(context).pop();
             },
           ),
           Divider(),
@@ -65,6 +79,7 @@ class OfficerDrawer extends StatelessWidget {
             trailing: Icon(Icons.meeting_room),
             onTap: () {
               Navigator.of(context).pushNamed(ParolList.routeName);
+              Navigator.of(context).pop();
             },
           ),
           Divider(),
@@ -73,6 +88,7 @@ class OfficerDrawer extends StatelessWidget {
             trailing: Icon(Icons.feedback),
             onTap: () {
               Navigator.of(context).pushNamed(FeedBackScreen.routeName);
+              Navigator.of(context).pop();
             },
           ),
           Divider(),

@@ -6,7 +6,7 @@ import 'package:prisonbook/screens/attendance_screen.dart';
 import 'package:prisonbook/screens/employees_list_screen.dart';
 import 'package:prisonbook/screens/feedback_screen.dart';
 import 'package:prisonbook/screens/officers_list_screen.dart';
-import 'package:prisonbook/screens/profile_edit_screen.dart';
+import 'package:prisonbook/screens/employee_profile_edit_screen.dart';
 import 'package:provider/provider.dart';
 // import 'package:prisonbook/employee_screens/employees_list_screen.dart';
 // import 'package:prisonbook/employee_screens/officers_list_screen.dart';
@@ -20,7 +20,7 @@ class EmployeeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var profileImage = Provider.of<DBHelper>(context).getProfileImage();
+    var profileImage = Provider.of<DBHelper>(context).getEmployeeProfileImage();
     return Drawer(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: Column(
@@ -48,7 +48,7 @@ class EmployeeDrawer extends StatelessWidget {
                             : FileImage(profileImage)),
                     GestureDetector(
                       onTap: () => Navigator.of(context)
-                          .pushNamed(ProfileEditScreen.routeName),
+                          .pushNamed(EmployeeProfileEditScreen.routeName),
                       child: const CircleAvatar(
                         backgroundColor: Colors.grey,
                         child: Icon(
