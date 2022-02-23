@@ -9,9 +9,8 @@ class PrisonsListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
         shrinkWrap: true,
-        physics: isOfficerView
-            ? NeverScrollableScrollPhysics()
-            : BouncingScrollPhysics(),
+        physics: NeverScrollableScrollPhysics(),
+
         // physics:BouncingScrollPhysics(),
         itemCount: 12,
         itemBuilder: (context, index) {

@@ -1,13 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:prisonbook/models/db_helper.dart';
 // import 'package:prisonbook/employee_screens/home_page.dart';
 import 'package:prisonbook/screens/employee_home_page.dart';
+import 'package:prisonbook/screens/officer_home_page.dart';
+import 'package:provider/provider.dart';
 // import 'package:prisonbook/screens/home_page.dart';
 // import 'package:prisonbook/screens/main_prisoner_view.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  LoginPage({Key? key}) : super(key: key);
 
   static String routeName = 'login page';
+  final formKey = GlobalKey<FormState>();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  void onSubmit(BuildContext context, String username, String password) {
+    Provider.of<DBHelper>(context, listen: false)
+        .loginFn(username, password)
+        .then((value) {
+      print('!!!!' + value.toString());
+      if (value == 'error') {
+        return showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Some error occured '),
+                content: Text('please try again later'),
+              );
+            });
+      } else if (value == 'officer') {
+        Navigator.of(context).pushNamed(OfficerHomePage.routeName);
+      } else {
+        Navigator.of(context).pushNamed(EmployeeHomePage.routeName);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +69,9 @@ class LoginPage extends StatelessWidget {
                   child: Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
-                    child: TextFormField(),
+                    child: TextFormField(
+                      controller: usernameController,
+                    ),
                   )),
               SizedBox(
                 height: 40,
@@ -55,14 +85,18 @@ class LoginPage extends StatelessWidget {
                   child: Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
-                    child: TextFormField(),
+                    child: TextFormField(
+                      controller: passwordController,
+                    ),
                   )),
               SizedBox(
                 height: 40,
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(EmployeeHomePage.routeName);
+                  onSubmit(context, usernameController.text,
+                      passwordController.text);
+                  FocusScope.of(context).unfocus();
                 },
                 child: Container(
                   height: 50,

@@ -8,6 +8,7 @@ import 'package:prisonbook/screens/attendance_screen.dart';
 import 'package:prisonbook/screens/employee_home_page.dart';
 import 'package:prisonbook/screens/employees_list_screen.dart';
 import 'package:prisonbook/screens/feedback_screen.dart';
+import 'package:prisonbook/screens/loading_page.dart';
 import 'package:prisonbook/screens/login_page.dart';
 import 'package:prisonbook/screens/main_prisoner_view.dart';
 import 'package:prisonbook/screens/malicious_activity_screen.dart';
@@ -18,7 +19,7 @@ import 'package:prisonbook/screens/officer_profile_edit_screen.dart';
 import 'package:prisonbook/screens/officers_list_screen.dart';
 import 'package:prisonbook/screens/parol_list.dart';
 import 'package:prisonbook/screens/employee_profile_edit_screen.dart';
-import 'package:prisonbook/widgets/prisons_list_view.dart';
+// import 'package:prisonbook/widgets/prisons_list_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:shared_preferance/';
@@ -29,17 +30,33 @@ class PrisonBook extends StatelessWidget {
   final copBlue = Color.fromARGB(255, 53, 51, 117);
   @override
   Widget build(BuildContext context) {
-    // Future<bool> getTheme() async {
-    //   final pref = await SharedPreferences.getInstance();
-    //   return pref.getBool('isDark') ?? false;
-    // }
+    Future<String?> getType() async {
+      final pref = await SharedPreferences.getInstance();
+      return pref.getString('type');
+    }
 
     return ChangeNotifierProvider(
       create: (context) => DBHelper(),
       // builder: (context){},
       child: MaterialApp(
         theme: ThemeData.dark(),
-        home: OfficerHomePage(),
+        home: FutureBuilder(
+            future: getType(),
+            builder: (context, snap) {
+              if (snap.connectionState == ConnectionState.waiting) {
+                print('waiting...');
+                LoadingPage();
+              } else if (snap.data == 'officer') {
+                print('officer detected');
+                return OfficerHomePage();
+              } else if (snap.data == 'employeee') {
+                print('employee detected');
+                return EmployeeHomePage();
+              } else {
+                return LoginPage();
+              }
+              return LoginPage();
+            }),
         routes: {
           MainPrisonerView.routeName: (ctx) => MainPrisonerView(),
           EmployeeProfileEditScreen.routeName: (ctx) =>
@@ -58,6 +75,7 @@ class PrisonBook extends StatelessWidget {
               MaliciousActivityListScreen(),
           ParolList.routeName: (ctx) => ParolList(),
           FeedBackScreen.routeName: (ctx) => FeedBackScreen(),
+          EmployeeHomePage.routeName: (ctx) => EmployeeHomePage(),
         },
       ),
     );

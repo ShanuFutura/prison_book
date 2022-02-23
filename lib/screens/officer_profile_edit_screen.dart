@@ -18,6 +18,7 @@ class _OfficerProfileEditScreenState extends State<OfficerProfileEditScreen> {
   var _gender = '';
   var position;
   var state;
+  final formKey = GlobalKey<FormState>();
 
   File? _storedImage;
 
@@ -66,11 +67,19 @@ class _OfficerProfileEditScreenState extends State<OfficerProfileEditScreen> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        color: Colors.black.withOpacity(.1),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.black.withOpacity(.1),
+        ),
         padding: EdgeInsets.all(5),
         child: child,
       ),
     );
+  }
+
+  trySubmit() {
+    formKey.currentState!.validate();
+    if (formKey.currentState!.validate()) {}
   }
 
   @override
@@ -88,6 +97,7 @@ class _OfficerProfileEditScreenState extends State<OfficerProfileEditScreen> {
       ),
       body: SingleChildScrollView(
         child: Form(
+          key: formKey,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -118,12 +128,23 @@ class _OfficerProfileEditScreenState extends State<OfficerProfileEditScreen> {
                 greyContainerBuilder(
                   TextFormField(
                     decoration: InputDecoration(label: Text('name')),
+                    validator: (v) {
+                      if (v!.isEmpty) {
+                        return "name cannot be empty";
+                      }
+                    },
                   ),
                 ),
                 greyContainerBuilder(
                   TextFormField(
-                      decoration: InputDecoration(label: Text('address')),
-                      maxLines: 5),
+                    decoration: InputDecoration(label: Text('address')),
+                    maxLines: 5,
+                    validator: (v) {
+                      if (v!.isEmpty) {
+                        return "address cannot be empty";
+                      }
+                    },
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -133,6 +154,13 @@ class _OfficerProfileEditScreenState extends State<OfficerProfileEditScreen> {
                       color: Colors.black.withOpacity(.1),
                       padding: EdgeInsets.all(5),
                       child: TextFormField(
+                        validator: (v) {
+                          if (v!.isEmpty) {
+                            return "age cannot be empty";
+                          } else if (int.parse(v) > 120 || int.parse(v) < 0) {
+                            return 'enter a valid age';
+                          }
+                        },
                         decoration: InputDecoration(label: Text('age')),
                       ),
                     ),
@@ -162,11 +190,27 @@ class _OfficerProfileEditScreenState extends State<OfficerProfileEditScreen> {
                 greyContainerBuilder(
                   TextFormField(
                     decoration: InputDecoration(label: Text('phone')),
+                    validator: (v) {
+                      if (v!.isEmpty) {
+                        return "number cannot be empty";
+                      } else if (v.length != 10) {
+                        return 'enter a valid phone number';
+                      }
+                    },
                   ),
                 ),
                 greyContainerBuilder(
                   TextFormField(
                     decoration: InputDecoration(label: Text('email')),
+                    validator: (v) {
+                      if (v!.isEmpty) {
+                        return 'email cannot be empty';
+                      } else if (!v.contains('@') ||
+                          !v.contains('.') ||
+                          v.contains(' ')) {
+                        return 'email is badly formated';
+                      }
+                    },
                   ),
                 ),
                 Row(

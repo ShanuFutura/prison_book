@@ -19,7 +19,7 @@ import 'package:prisonbook/widgets/prisons_list_view.dart';
 class EmployeeHomePage extends StatelessWidget {
   const EmployeeHomePage({Key? key}) : super(key: key);
 
-  static const String routeName = 'homepage';
+  static const String routeName = 'employeehomepage';
 
   @override
   Widget build(BuildContext context) {

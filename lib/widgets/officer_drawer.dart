@@ -1,9 +1,11 @@
+// import 'dart:html';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:prisonbook/models/db_helper.dart';
 import 'package:prisonbook/screens/employees_list_screen.dart';
 import 'package:prisonbook/screens/feedback_screen.dart';
+import 'package:prisonbook/screens/login_page.dart';
 import 'package:prisonbook/screens/officer_attendance_view.dart';
 // import 'package:prisonbook/screens/officer_home_page.dart';
 import 'package:prisonbook/screens/officer_profile_edit_screen.dart';
@@ -89,6 +91,18 @@ class OfficerDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pushNamed(FeedBackScreen.routeName);
               Navigator.of(context).pop();
+              // Navigator.push(context, MaterialPageRoute(builder: Empl));
+            },
+          ),
+          Divider(),
+          ListTile(
+            title: Text('logout'),
+            trailing: Icon(Icons.logout),
+            onTap: () {
+              Provider.of<DBHelper>(context, listen: false).logout();
+
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(LoginPage.routeName);
             },
           ),
           Divider(),
