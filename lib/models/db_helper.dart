@@ -14,12 +14,20 @@ class DBHelper extends ChangeNotifier {
 
   var employeeId;
 
+  var employeeList = [];
+
 //////////////////////////////////////////////////
 
   fetchAndSetEmpId() async {
     final pref = await SharedPreferences.getInstance();
     employeeId = pref.getString('id');
     print('fetched id : ' + employeeId);
+  }
+
+  fetchAndSetPrisonersList() async {
+    final res = await get(Uri.parse(urlS + 'prisoner_list.php'));
+    employeeList = jsonDecode(res.body);
+    print('list fetch :' + employeeList.toString());
   }
 
   File? getEmployeeProfileImage() {
