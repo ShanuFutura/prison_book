@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:prisonbook/models/db_helper.dart';
 
 import 'package:prisonbook/screens/add_prisoner_screen.dart';
@@ -8,9 +9,11 @@ import 'package:prisonbook/widgets/prisoner_view_sliver_appbar.dart';
 import 'package:provider/provider.dart';
 
 class MainPrisonerView extends StatelessWidget {
-  const MainPrisonerView({Key? key}) : super(key: key);
+  // const MainPrisonerView({Key? key}) : super(key: key);
 
   static const String routeName = 'main prisoner view';
+  var snapForAppBar;
+  var prisonerId;
 
   healthDialogCard(BuildContext context) {
     showDialog(
@@ -51,6 +54,7 @@ class MainPrisonerView extends StatelessWidget {
   }
 
   maliciouseShowDialog(BuildContext context) {
+    var activity;
     showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -66,21 +70,38 @@ class MainPrisonerView extends StatelessWidget {
                     hint: Text('malicious act type'),
                     items: const [
                       DropdownMenuItem(
-                        child: Text('male'),
-                        value: 'male',
+                        child: Text('prison break attempt'),
+                        value: 'prison break attempt',
                       ),
                       DropdownMenuItem(
-                        child: Text('female'),
-                        value: 'female',
-                      )
+                        child: Text('violence'),
+                        value: 'violence',
+                      ),
+                      DropdownMenuItem(
+                        child: Text('theft'),
+                        value: 'theft',
+                      ),
                     ],
-                    onChanged: (val) {}),
+                    onChanged: (val) {
+                      activity = val;
+                    }),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    ElevatedButton(onPressed: () {}, child: Text('date')),
-                    IconButton(onPressed: () {}, icon: Icon(Icons.done)),
+                    // ElevatedButton(onPressed: () {}, child: Text('date')),
+                    IconButton(
+                        onPressed: () async {
+                          final res = await Provider.of<DBHelper>(context,
+                                  listen: false)
+                              .reportMaliciousActivity(prisonerId, activity);
+                          if (res == 'Successfully reported') {
+                            Fluttertoast.showToast(
+                                msg: 'added malicious activity');
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        icon: Icon(Icons.done)),
                   ],
                 ),
               ],
@@ -92,6 +113,7 @@ class MainPrisonerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
+    prisonerId = ModalRoute.of(context)!.settings.arguments;
 
     return Scaffold(
       drawer: PrisonerViewDrawer(
@@ -113,6 +135,7 @@ class MainPrisonerView extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             } else if (snap.hasData) {
+              snapForAppBar = snap;
               return CustomScrollView(slivers: [
                 SliverAppBar(
                   actions: [

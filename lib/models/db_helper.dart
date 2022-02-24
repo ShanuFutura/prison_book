@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DBHelper extends ChangeNotifier {
@@ -15,6 +16,8 @@ class DBHelper extends ChangeNotifier {
   var employeeId;
 
   var employeeList = [];
+
+  var prisonersList = [];
 
 //////////////////////////////////////////////////
 
@@ -31,10 +34,12 @@ class DBHelper extends ChangeNotifier {
     return jsonDecode(res.body);
   }
 
-  fetchAndSetPrisonersList() async {
+  Future<void> fetchAndSetPrisonersList() async {
     final res = await get(Uri.parse(urlS + 'prisoner_list.php'));
-    employeeList = jsonDecode(res.body);
-    print('list fetch :' + employeeList.toString());
+    prisonersList = jsonDecode(res.body);
+    print('list fetch :' + prisonersList.toString());
+    // return prisonersList as List<Map>;
+    // notifyListeners();
   }
 
   File? getEmployeeProfileImage() {
@@ -109,5 +114,16 @@ class DBHelper extends ChangeNotifier {
         await post(Uri.parse(urlS + 'update.php'), body: {'emp_id': '2'});
     print('res........' + (jsonDecode(res.body)).toString());
     return jsonDecode(res.body);
+  }
+
+  Future<String> reportMaliciousActivity(
+      String prisonerId, String activity) async {
+    final res = await post(Uri.parse(urlS + 'report.php'), body: {
+      'prisoner_id': prisonerId,
+      'activity': activity,
+      'date': DateFormat('dd/mm/yyyy').format(DateTime.now())
+    });
+    print(res.body);
+    return jsonDecode(res.body)['message'];
   }
 }
