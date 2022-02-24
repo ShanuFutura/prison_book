@@ -14,6 +14,14 @@ class DBHelper extends ChangeNotifier {
 
   var employeeId;
 
+//////////////////////////////////////////////////
+
+  fetchAndSetEmpId() async {
+    final pref = await SharedPreferences.getInstance();
+    employeeId = pref.getString('id');
+    print('fetched id : ' + employeeId);
+  }
+
   File? getEmployeeProfileImage() {
     return EmployeeProfileImage;
   }
@@ -31,7 +39,8 @@ class DBHelper extends ChangeNotifier {
 
       final pref = await SharedPreferences.getInstance();
       pref.setString('type', jsonDecode(res.body)['type']);
-      employeeId = jsonDecode(res.body)['type'];
+      pref.setString('id', jsonDecode(res.body)['id']);
+      // employeeId = jsonDecode(res.body)['id'];
       return jsonDecode(res.body)['type'];
     } on Exception catch (error) {
       print(error);
@@ -39,7 +48,7 @@ class DBHelper extends ChangeNotifier {
     }
   }
 
-  employeeProfileEdit(
+  Future<String> employeeProfileEdit(
     String name,
     String age,
     String address,
@@ -47,8 +56,27 @@ class DBHelper extends ChangeNotifier {
     String phone,
     String email,
     // File photo,
-  ) {
-    print('{$name,$age,$address,$gender,$phone,$email}');
+  ) async {
+    try {
+      final res = await post(Uri.parse(urlS + 'insert_updated_emp.php'), body: {
+        'emp_id': employeeId,
+        'emp_name': name,
+        'age': age,
+        'address': address,
+        'email_id': email,
+        'gender': gender,
+        'mobile_number': phone,
+      });
+      print((res.body));
+      // return jsonDecode(res.body)['message'];
+      if (jsonDecode(res.body)['message'] == "Successfully Updated") {
+        return "successfully Updated";
+      } else
+        return "something went wrong";
+    } on Exception catch (err) {
+      print(err);
+      return 'something went wrong';
+    }
   }
 
   feedBackSend(String message) {

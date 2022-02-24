@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:prisonbook/models/db_helper.dart';
+import 'package:prisonbook/screens/employee_home_page.dart';
 import 'package:provider/provider.dart';
 
 class EmployeeProfileEditScreen extends StatefulWidget {
@@ -22,6 +24,7 @@ class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
   File? _storedImage;
   final formKey = GlobalKey<FormState>();
   var name, address, age, gender, phone, email;
+  var response = '';
 
   Widget greyContainerBuilder(Widget child) {
     return Padding(
@@ -75,7 +78,7 @@ class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
     // print(DummyLists.oldPrescImages.toString());
   }
 
-  trySubmit(BuildContext context) {
+  trySubmit(BuildContext context) async {
     if (_gender == null) {
       showDialog(
           context: context,
@@ -88,7 +91,9 @@ class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
     formKey.currentState!.validate();
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      Provider.of<DBHelper>(context, listen: false).employeeProfileEdit(
+
+      final res = await Provider.of<DBHelper>(context, listen: false)
+          .employeeProfileEdit(
         name,
         age,
         address,
@@ -96,6 +101,10 @@ class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
         phone,
         email,
       );
+      Fluttertoast.showToast(msg: res);
+      if (res == "successfully Updated") {
+        Navigator.of(context).pushReplacementNamed(EmployeeHomePage.routeName);
+      }
     }
   }
 
@@ -196,6 +205,7 @@ class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
                               color: Colors.black.withOpacity(.1),
                               padding: EdgeInsets.all(5),
                               child: TextFormField(
+                                initialValue: (snap.data as Map)['age'],
                                 decoration: InputDecoration(label: Text('age')),
                                 keyboardType: TextInputType.number,
                                 validator: (v) {
@@ -215,6 +225,7 @@ class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
                               color: Colors.black.withOpacity(.1),
                               padding: EdgeInsets.all(5),
                               child: DropdownButton(
+                                  value: (snap.data as Map)['gender'],
                                   hint: Text(
                                       _gender == null ? 'gender' : _gender),
                                   items: const [
@@ -237,6 +248,7 @@ class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
                         ),
                         greyContainerBuilder(
                           TextFormField(
+                            initialValue: (snap.data as Map)['mobile_number'],
                             keyboardType: TextInputType.phone,
                             validator: (v) {
                               if (v!.trim().isEmpty) {
@@ -255,6 +267,7 @@ class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
                         ),
                         greyContainerBuilder(
                           TextFormField(
+                            initialValue: (snap.data as Map)['email_id'],
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(label: Text('email')),
                             validator: (v) {

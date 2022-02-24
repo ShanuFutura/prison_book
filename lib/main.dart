@@ -48,9 +48,12 @@ class PrisonBook extends StatelessWidget {
                 LoadingPage();
               } else if (snap.data == 'officer') {
                 print('officer detected');
+                Provider.of<DBHelper>(context).fetchAndSetEmpId();
                 return OfficerHomePage();
               } else if (snap.data == 'employeee') {
                 print('employee detected');
+                Provider.of<DBHelper>(context).fetchAndSetEmpId();
+
                 return EmployeeHomePage();
               } else {
                 return LoginPage();
