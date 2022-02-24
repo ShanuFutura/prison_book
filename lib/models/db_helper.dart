@@ -24,6 +24,13 @@ class DBHelper extends ChangeNotifier {
     print('fetched id : ' + employeeId);
   }
 
+  Future<dynamic> fetchPrisonerDetails() async {
+    final res = await post(Uri.parse(urlS + 'prison_view.php'),
+        body: {'prisoner_id': '1'});
+    print(res.body);
+    return jsonDecode(res.body);
+  }
+
   fetchAndSetPrisonersList() async {
     final res = await get(Uri.parse(urlS + 'prisoner_list.php'));
     employeeList = jsonDecode(res.body);

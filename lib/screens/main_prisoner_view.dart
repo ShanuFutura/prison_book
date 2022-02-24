@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:prisonbook/models/db_helper.dart';
 
 import 'package:prisonbook/screens/add_prisoner_screen.dart';
 
 import 'package:prisonbook/widgets/prisoner_view_drawer.dart';
 import 'package:prisonbook/widgets/prisoner_view_sliver_appbar.dart';
+import 'package:provider/provider.dart';
 
 class MainPrisonerView extends StatelessWidget {
   const MainPrisonerView({Key? key}) : super(key: key);
@@ -103,125 +105,179 @@ class MainPrisonerView extends StatelessWidget {
         },
         child: Icon(Icons.report),
       ),
-      body: CustomScrollView(slivers: [
-        SliverAppBar(
-          actions: [
-            IconButton(
-                onPressed: () {
-                  healthDialogCard(context);
-                },
-                icon: Icon(Icons.health_and_safety)),
-            IconButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(AddPrisonerScreen.routeName);
-                },
-                icon: Icon(Icons.edit))
-          ],
-          pinned: true,
-          expandedHeight: 200,
-          flexibleSpace: PrisonerViewSliverAppbar(),
-        ),
-        SliverFillRemaining(
-          child: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ListTile(
-                  title: Text('Crime'),
-                ),
-                ListTile(title: Text('Section')),
-                Row(
-                  children: [
-                    Expanded(child: ListTile(title: Text('entry'))),
-                    Expanded(child: ListTile(title: Text('release'))),
+      body: FutureBuilder(
+          future: Provider.of<DBHelper>(context).fetchPrisonerDetails(),
+          builder: (context, snap) {
+            if (snap.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snap.hasData) {
+              return CustomScrollView(slivers: [
+                SliverAppBar(
+                  actions: [
+                    IconButton(
+                        onPressed: () {
+                          healthDialogCard(context);
+                        },
+                        icon: Icon(Icons.health_and_safety)),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(AddPrisonerScreen.routeName);
+                        },
+                        icon: Icon(Icons.edit))
                   ],
+                  pinned: true,
+                  expandedHeight: 200,
+                  flexibleSpace: PrisonerViewSliverAppbar(snap.data as Map),
                 ),
-                Center(
-                  child: Container(
-                    height: 200,
-                    width: deviceWidth * .95,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Color.fromRGBO(255, 255, 255, .2)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('address'),
-                    ),
-                  ),
-                ),
-                Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Text('Parole'),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                SliverFillRemaining(
+                  child: SingleChildScrollView(
+                    physics: NeverScrollableScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('from'),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 30,
-                            width: 70,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Color.fromRGBO(255, 255, 255, .3)),
+                        ListTile(
+                          title: Row(
+                            children: [
+                              Text('Crime'),
+                              const SizedBox(width: 30),
+                              Chip(label: Text((snap.data as Map)['crime']))
+                            ],
                           ),
                         ),
-                        Text('to'),
+                        ListTile(
+                            title: Row(
+                          children: [
+                            Text('Section'),
+                            const SizedBox(width: 30),
+                            Chip(label: Text((snap.data as Map)['section_no']))
+                          ],
+                        )),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: ListTile(
+                              title: Row(
+                                children: [
+                                  Text('entry'),
+                                  SizedBox(width: deviceWidth * .04),
+                                  Chip(
+                                      label: Text(
+                                          (snap.data as Map)['entry_date']))
+                                ],
+                              ),
+                            )),
+                            Expanded(
+                                child: ListTile(
+                                    title: Row(
+                              children: [
+                                Text('release'),
+                                SizedBox(width: deviceWidth * .04),
+                                Chip(
+                                    label: Text(
+                                        (snap.data as Map)['releasing_date']))
+                              ],
+                            ))),
+                          ],
+                        ),
+                        Center(
+                          child: Container(
+                            height: 200,
+                            width: deviceWidth * .95,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color.fromRGBO(255, 255, 255, .2)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'address',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text((snap.data as Map)['address']),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Text('Parole'),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text('from'),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Chip(
+                                      label: Text(
+                                          (snap.data as Map)['starting_date'])),
+                                ),
+                                Text('to'),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Chip(
+                                    label: Text(
+                                        (snap.data as Map)['rejoining_date']),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 30,
-                            width: 70,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Color.fromRGBO(255, 255, 255, .3)),
+                          child: Row(
+                            children: [
+                              Text('Transfer'),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  height: 30,
+                                  width: 70,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Color.fromRGBO(255, 255, 255, .3)),
+                                ),
+                              ),
+                            ],
                           ),
+                        ),
+                        Divider(),
+                        const Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Text(
+                            'visitors',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('No visiters...'),
                         )
                       ],
                     ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Text('Transfer'),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: 30,
-                          width: 70,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Color.fromRGBO(255, 255, 255, .3)),
-                        ),
-                      ),
-                    ],
                   ),
                 ),
-                Divider(),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    'visitors',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('No visiters...'),
-                )
-              ],
-            ),
-          ),
-        ),
-      ]),
+              ]);
+            } else {
+              return Center(
+                child: Text('Something went wrong'),
+              );
+            }
+          }),
     );
   }
 }

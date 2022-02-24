@@ -3,9 +3,8 @@
 import 'package:flutter/material.dart';
 
 class PrisonerViewSliverAppbar extends StatelessWidget {
-  const PrisonerViewSliverAppbar({
-    Key? key,
-  }) : super(key: key);
+  final Map dataMap;
+  PrisonerViewSliverAppbar(this.dataMap);
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +23,10 @@ class PrisonerViewSliverAppbar extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Padding(
                 padding: EdgeInsets.all(7.0),
-                child: Text('name'),
+                child: Chip(label: Text(dataMap['prisoner_name'])),
               ),
               Padding(
                 padding: EdgeInsets.all(7.0),
@@ -43,7 +42,7 @@ class PrisonerViewSliverAppbar extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.all(7.0),
-                child: Text('cell'),
+                child: Chip(label: Text(dataMap['cell_no'])),
               ),
             ],
           ),
