@@ -54,7 +54,7 @@ class PrisonBook extends StatelessWidget {
                 print('employee detected');
                 // Provider.of<DBHelper>(context).fetchAndSetPrisonersList();
                 Provider.of<DBHelper>(context).fetchAndSetEmpId();
-
+                // Provider.of<DBHelper>(context).fetchAndSetOfficersList();
                 return EmployeeHomePage();
               } else {
                 return LoginPage();

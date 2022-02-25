@@ -12,19 +12,35 @@ class EmployeesListScreen extends StatelessWidget {
     final empList = Provider.of<DBHelper>(context).employeeList;
     return Scaffold(
       appBar: AppBar(),
-      body: ListView.builder(
-          itemCount: empList.length,
-          itemBuilder: (ctx, index) {
-            return Column(
-              children: [
-                ListTile(
-                  leading: CircleAvatar(),
-                  title: Text(empList[index]['prisoner_name']),
-                  // subtitle: Text('subtitle'),
-                ),
-                Divider()
-              ],
-            );
+      body: FutureBuilder(
+          future: Provider.of<DBHelper>(context).fetchAndSetEmployeesList(),
+          builder: (context, snap) {
+            if (snap.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snap.hasData) {
+              return ListView.builder(
+                  itemCount: (snap.data as List).length,
+                  itemBuilder: (ctx, index) {
+                    return Column(
+                      children: [
+                        ListTile(
+                          leading: CircleAvatar(),
+                          title: Text((snap.data as dynamic)[index]['name']),
+                          subtitle: Text(
+                              (snap.data as dynamic)[index]['mobile_number']),
+                          // subtitle: Text('subtitle'),
+                        ),
+                        Divider()
+                      ],
+                    );
+                  });
+            } else {
+              return Center(
+                child: Text('Something wrong'),
+              );
+            }
           }),
     );
   }

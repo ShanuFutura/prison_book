@@ -16,6 +16,9 @@ class MainPrisonerView extends StatelessWidget {
   var prisonerId;
 
   healthDialogCard(BuildContext context) {
+    var prisonerHealth =
+        Provider.of<DBHelper>(context, listen: false).prisonerHealthStatus;
+    // var healthStatus;
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -23,32 +26,27 @@ class MainPrisonerView extends StatelessWidget {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
-                  Text('critical'),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
-                  Text('not well'),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Radio(value: 'x', groupValue: 0, onChanged: (v) {}),
-                  Text('healthy'),
-                ],
-              ),
-            ],
+            children: ['critical', 'not well', 'healthy'].map(
+              (e) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          Provider.of<DBHelper>(context, listen: false)
+                              .reportHealthStatus(prisonerId, e);
+                          Navigator.of(context).pop();
+                        },
+                        icon: Icon(
+                          Icons.offline_pin,
+                          color:
+                              prisonerHealth == e ? Colors.blue : Colors.grey,
+                        )),
+                    Text(e)
+                  ],
+                );
+              },
+            ).toList(),
           ));
         });
   }
@@ -114,6 +112,7 @@ class MainPrisonerView extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     prisonerId = ModalRoute.of(context)!.settings.arguments;
+    // prisonerHealth = Provider.of<DBHelper>(context).prisonerHealthStatus;
 
     return Scaffold(
       drawer: PrisonerViewDrawer(

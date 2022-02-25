@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +19,8 @@ class DBHelper extends ChangeNotifier {
   var employeeList = [];
 
   var prisonersList = [];
+
+  var prisonerHealthStatus = 'healthy';
 
 //////////////////////////////////////////////////
 
@@ -125,5 +128,30 @@ class DBHelper extends ChangeNotifier {
     });
     print(res.body);
     return jsonDecode(res.body)['message'];
+  }
+
+  reportHealthStatus(String prisonerId, String healthStatus) async {
+    try {
+      final res = await post(Uri.parse(urlS + 'health_status.php'),
+          body: {'prisoner_id': prisonerId, 'status': healthStatus});
+      prisonerHealthStatus = healthStatus;
+      notifyListeners();
+      Fluttertoast.showToast(msg: 'health status upfdated');
+      print(res.body);
+    } on Exception catch (err) {
+      print(err);
+    }
+  }
+
+  Future<dynamic> fetchAndSetOfficersList() async {
+    final res = await get(Uri.parse(urlS + 'officers_list.php'));
+    print('officers list : ' + res.body);
+    return jsonDecode(res.body);
+  }
+
+  Future<dynamic> fetchAndSetEmployeesList() async {
+    final res = await get(Uri.parse(urlS + 'employee_list.php'));
+    print('employees : ' + res.body);
+    return jsonDecode(res.body);
   }
 }
