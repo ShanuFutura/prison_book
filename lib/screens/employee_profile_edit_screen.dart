@@ -7,6 +7,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:prisonbook/models/db_helper.dart';
 import 'package:prisonbook/screens/employee_home_page.dart';
+import 'package:prisonbook/widgets/drop_down_widget.dart';
 import 'package:provider/provider.dart';
 
 class EmployeeProfileEditScreen extends StatefulWidget {
@@ -129,11 +130,14 @@ class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
                 child: CircularProgressIndicator(),
               );
             } else if (!snap.hasData) {
+              
               return Center(
                 child: Text(
                     'Something went wrong please check your connection...'),
               );
             } else {
+              _gender = (snap.data as Map)['gender'];
+              print('gen>>>>>' + _gender);
               return SingleChildScrollView(
                 child: Form(
                   key: formKey,
@@ -222,27 +226,38 @@ class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
                               ),
                             ),
                             Container(
+                              // width: 90,
                               color: Colors.black.withOpacity(.1),
                               padding: EdgeInsets.all(5),
-                              child: DropdownButton(
-                                  value: (snap.data as Map)['gender'],
-                                  hint: Text(
-                                      _gender == null ? 'gender' : _gender),
-                                  items: const [
-                                    DropdownMenuItem(
-                                      child: Text('male'),
-                                      value: 'male',
-                                    ),
-                                    DropdownMenuItem(
-                                      child: Text('female'),
-                                      value: 'female',
-                                    )
-                                  ],
-                                  onChanged: (val) {
-                                    setState(() {
-                                      _gender = val.toString();
-                                    });
-                                  }),
+                              child:
+                                  // DropdownWidget(
+                                  //   title: 'gender',
+                                  //   items: ['male', 'female'],
+                                  //   itemCallBack: (value) {
+                                  //     _gender = value;
+                                  //   },
+                                  //   currentItem: (snap.data as Map)['gender'],
+                                  //   hintText: 'gender',
+                                  // )
+                                  DropdownButton(
+                                      value: (snap.data as Map)['gender'],
+                                      hint: Text(
+                                          _gender == null ? 'gender' : _gender),
+                                      items: const [
+                                        DropdownMenuItem(
+                                          child: Text('male'),
+                                          value: 'male',
+                                        ),
+                                        DropdownMenuItem(
+                                          child: Text('female'),
+                                          value: 'female',
+                                        )
+                                      ],
+                                      onChanged: (val) {
+                                        setState(() {
+                                          _gender = val.toString();
+                                        });
+                                      }),
                             ),
                           ],
                         ),
