@@ -102,8 +102,13 @@ class DBHelper extends ChangeNotifier {
     }
   }
 
-  feedBackSend(String message) {
+  Future<bool> feedBackSend(String message) async {
+    final res = await post(Uri.parse(urlS + 'add_feedback.php'), body: {});
+    print(res.body);
+
+    // Fluttertoast.showToast(msg: 'feedback sent');
     print(message);
+    return false;
   }
 
   logout() async {
