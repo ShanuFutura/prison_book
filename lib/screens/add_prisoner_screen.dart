@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:prisonbook/models/db_helper.dart';
 import 'package:prisonbook/widgets/add_prisoner_sliver_appbar.dart';
+import 'package:provider/provider.dart';
 
 class AddPrisonerScreen extends StatefulWidget {
   const AddPrisonerScreen({Key? key}) : super(key: key);
@@ -9,6 +12,19 @@ class AddPrisonerScreen extends StatefulWidget {
   @override
   State<AddPrisonerScreen> createState() => _AddPrisonerScreenState();
 }
+
+final fkey = GlobalKey<FormState>();
+
+var name = '';
+var age;
+var gender;
+var address = '';
+var crime = '';
+var section = '';
+var cell_no = '';
+var entryDate;
+var releaseDate;
+var profileImage;
 
 class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
   Widget greyContainerBuilder(Widget child) {
@@ -22,13 +38,66 @@ class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
     );
   }
 
-  var _gender = '';
+  Future<void> _selectEntryDate(BuildContext context) async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now().subtract(const Duration(days: 7)),
+      lastDate: DateTime.now().add(
+        const Duration(days: 10950),
+      ),
+    );
+    if (picked != null && picked != entryDate)
+      setState(() {
+        entryDate = picked;
+        print(entryDate.toIso8601String());
+      });
+  }
+
+  Future<void> _selectReleaseDate(BuildContext context) async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now().subtract(const Duration(days: 7)),
+      lastDate: DateTime.now().add(
+        const Duration(days: 10950),
+      ),
+    );
+    if (picked != null && picked != releaseDate)
+      setState(() {
+        releaseDate = picked;
+        print(releaseDate.toIso8601String());
+      });
+  }
+
+  trySave() {
+    if (fkey.currentState!.validate()) {
+      fkey.currentState!.save();
+      Provider.of<DBHelper>(context, listen: false).addPrisoner(
+          name: name,
+          crime: crime,
+          entry_date: entryDate,
+          releasing_date: releaseDate,
+          age: age,
+          address: address,
+          cell_no: cell_no,
+          gender: gender,
+          imageFile: profileImage,
+          section: section);
+    }
+  }
+
+  getPick() async {
+    profileImage =
+        await Provider.of<DBHelper>(context, listen: false).pickImage();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: trySave,
         child: Icon(Icons.save),
       ),
       body: CustomScrollView(
@@ -37,10 +106,37 @@ class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
             actions: [IconButton(onPressed: () {}, icon: Icon(Icons.done))],
             pinned: true,
             expandedHeight: 200,
-            flexibleSpace: AddPrisonerSliverAppBar(),
+            flexibleSpace: FlexibleSpaceBar(
+              background: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 0, 10),
+                    child: Stack(alignment: Alignment.bottomRight, children: [
+                      CircleAvatar(
+                        radius: 90,
+                        backgroundImage: profileImage != null
+                            ? FileImage(profileImage)
+                            : AssetImage('assets/avatar.png') as ImageProvider,
+                      ),
+                      GestureDetector(
+                        onTap: getPick,
+                        child: const CircleAvatar(
+                          backgroundColor: Colors.grey,
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ]),
+                  )
+                ],
+              ),
+            ),
           ),
           SliverFillRemaining(
             child: Form(
+              key: fkey,
               child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: SingleChildScrollView(
@@ -50,6 +146,14 @@ class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
                       greyContainerBuilder(
                         TextFormField(
                           decoration: InputDecoration(label: Text('name')),
+                          validator: (v) {
+                            if (v!.trim().isEmpty) {
+                              return 'name cannot be empty';
+                            }
+                          },
+                          onSaved: (v) {
+                            name = v!;
+                          },
                         ),
                       ),
                       Row(
@@ -61,14 +165,24 @@ class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
                             padding: EdgeInsets.all(5),
                             child: TextFormField(
                               decoration: InputDecoration(label: Text('age')),
+                              validator: (v) {
+                                if (v!.trim().isEmpty) {
+                                  return 'age cannot be empty';
+                                }
+                                if (int.parse(v) > 120) {
+                                  return 'enter a valid age';
+                                }
+                              },
+                              onSaved: (v) {
+                                age = v;
+                              },
                             ),
                           ),
                           Container(
                             color: Colors.black.withOpacity(.1),
                             padding: EdgeInsets.all(5),
                             child: DropdownButton(
-                                hint:
-                                    Text(_gender == null ? 'gender' : _gender),
+                                hint: Text(gender == null ? 'gender' : gender),
                                 items: const [
                                   DropdownMenuItem(
                                     child: Text('male'),
@@ -81,7 +195,7 @@ class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
                                 ],
                                 onChanged: (val) {
                                   setState(() {
-                                    _gender = val.toString();
+                                    gender = val.toString();
                                   });
                                 }),
                           ),
@@ -91,6 +205,14 @@ class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
                         TextFormField(
                           maxLines: 5,
                           decoration: InputDecoration(label: Text('address')),
+                          validator: (v) {
+                            if (v!.trim().isEmpty) {
+                              return 'address cannot be empty';
+                            }
+                          },
+                          onSaved: (v) {
+                            address = v!;
+                          },
                         ),
                       ),
                       Divider(),
@@ -102,6 +224,14 @@ class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
                               TextFormField(
                                 decoration:
                                     InputDecoration(label: Text('crime')),
+                                validator: (v) {
+                                  if (v!.trim().isEmpty) {
+                                    return 'Crime cannot be empty';
+                                  }
+                                },
+                                onSaved: (v) {
+                                  crime = v!;
+                                },
                               ),
                             ),
                           ),
@@ -114,6 +244,14 @@ class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
                               child: TextFormField(
                                 decoration:
                                     InputDecoration(label: Text('section')),
+                                validator: (v) {
+                                  if (v!.trim().isEmpty) {
+                                    return 'enter section';
+                                  }
+                                },
+                                onSaved: (v) {
+                                  section = v!;
+                                },
                               ),
                             ),
                           ),
@@ -122,15 +260,49 @@ class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
                       greyContainerBuilder(
                         TextFormField(
                           decoration: InputDecoration(label: Text('cell.no')),
+                          validator: (v) {
+                            if (v!.trim().isEmpty) {
+                              return 'cell number cannot be empty';
+                            }
+                          },
+                          onSaved: (v) {
+                            cell_no = v!;
+                          },
                         ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          ElevatedButton(
-                              onPressed: () {}, child: Text('entry date')),
-                          ElevatedButton(
-                              onPressed: () {}, child: Text('release date'))
+                          GestureDetector(
+                            onTap: () {
+                              _selectEntryDate(context);
+                            },
+                            child: Chip(
+                              label: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(entryDate == null
+                                    ? 'entry date'
+                                    : DateFormat('dd/MM/yyyy')
+                                        .format(entryDate)),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              _selectReleaseDate(context);
+                            },
+                            child: Chip(
+                              label: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  releaseDate == null
+                                      ? 'release date'
+                                      : DateFormat('dd/MM/yyyy')
+                                          .format(releaseDate),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ],

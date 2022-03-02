@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:prisonbook/models/image_upload.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DBHelper extends ChangeNotifier {
@@ -40,7 +42,7 @@ class DBHelper extends ChangeNotifier {
   Future<void> fetchAndSetPrisonersList() async {
     final res = await get(Uri.parse(urlS + 'prisoner_list.php'));
     prisonersList = jsonDecode(res.body);
-    print('list fetch :' + prisonersList.toString());
+    print('list fetch :' + prisonersList[0]['photo']);
     // return prisonersList as List<Map>;
     // notifyListeners();
   }
@@ -103,12 +105,18 @@ class DBHelper extends ChangeNotifier {
   }
 
   Future<bool> feedBackSend(String message) async {
-    final res = await post(Uri.parse(urlS + 'add_feedback.php'), body: {});
-    print(res.body);
+    try {
+      final res = await post(Uri.parse(urlS + 'add_feedback.php'),
+          body: {'id': employeeId.toString(), 'feedback': message});
+      print(res.body);
 
-    // Fluttertoast.showToast(msg: 'feedback sent');
-    print(message);
-    return false;
+      // Fluttertoast.showToast(msg: 'feedback sent');
+      print(message);
+      return (jsonDecode(res.body)['message'] == 'Successfully added');
+    } on Exception catch (error) {
+      print(error);
+      return false;
+    }
   }
 
   logout() async {
@@ -158,5 +166,69 @@ class DBHelper extends ChangeNotifier {
     final res = await get(Uri.parse(urlS + 'employee_list.php'));
     print('employees : ' + res.body);
     return jsonDecode(res.body);
+  }
+
+  Future<bool> punchIn() async {
+    try {
+      final res = await post(Uri.parse(urlS + 'add_attandanc.php'), body: {
+        'emp_id': employeeId.toString(),
+        'date': DateFormat('dd/mm/yyyy').format(DateTime.now())
+      });
+      print(res.body);
+      return (jsonDecode(res.body)['message'] == 'Successfully added');
+    } on Exception catch (error) {
+      return false;
+    }
+  }
+
+  addPrisoner({
+    required String name,
+    required String crime,
+    required DateTime entry_date,
+    required DateTime releasing_date,
+    required String age,
+    required String address,
+    required String cell_no,
+    required String gender,
+    required File imageFile,
+    required String section,
+  }) async {
+    final res = await ImageUpload.upload(
+        imageFile: imageFile,
+        url: Uri.parse(urlS + 'prisoner_add.php'),
+        name: name,
+        crime: crime,
+        entryDate: entry_date,
+        releaseDate: releasing_date,
+        age: age,
+        address: address,
+        cellNo: cell_no,
+        gender: gender,
+        section: section);
+    // final res = await post(
+    //     Uri.parse(
+    //       urlS + 'prisoner_add.php',
+    //     ),
+    //     body: {
+    //       'prisoner_name': name,
+    //       'crime': crime,
+    //       'entry_date': DateFormat('dd/mm/yyyy').format(entry_date),
+    //       'releasing_date': DateFormat('dd/mm/yyyy').format(releasing_date),
+    //       'age': age.toString(),
+    //       'address': address,
+    //       'cell_no': cell_no,
+    //       'gender': gender,
+    //       'f1': '',
+    //     });
+    // print(res.body);
+    return res;
+  }
+
+  Future<File?> pickImage() async {
+    final picker = ImagePicker();
+    final tempImageFile = await picker.pickImage(source: ImageSource.gallery);
+    final imageFile = File(tempImageFile!.path);
+    print(imageFile.path);
+    return imageFile;
   }
 }

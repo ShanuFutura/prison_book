@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
-// import 'package:prisonbook/employee_screens/add_prisoner_screen.dart';
-// import 'package:prisonbook/employee_screens/attendance_screen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import 'package:prisonbook/models/db_helper.dart';
 import 'package:prisonbook/screens/add_prisoner_screen.dart';
-import 'package:prisonbook/screens/attendance_screen.dart';
-import 'package:prisonbook/screens/main_prisoner_view.dart';
 import 'package:prisonbook/screens/officers_list_screen.dart';
-// import 'package:prisonbook/employee_screens/main_prisoner_view.dart';
-// import 'package:prisonbook/employee_screens/officers_list_screen.dart';
-
-// import 'package:prisonbook/screens/add_prisoner_screen.dart';
-// import 'package:prisonbook/screens/attendance_screen.dart';
-// import 'package:prisonbook/screens/main_prisoner_view.dart';
-// import 'package:prisonbook/screens/officers_list_screen.dart';
-
 import 'package:prisonbook/widgets/employee_drawer.dart';
 import 'package:prisonbook/widgets/prisons_list_view.dart';
+
+import 'package:provider/provider.dart';
 
 class EmployeeHomePage extends StatelessWidget {
   const EmployeeHomePage({Key? key}) : super(key: key);
@@ -24,6 +17,7 @@ class EmployeeHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fullHeight = MediaQuery.of(context).size.height;
+    var punched = false;
 
     return Scaffold(
       body: CustomScrollView(
@@ -67,8 +61,18 @@ class EmployeeHomePage extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(40.0),
                               child: GestureDetector(
-                                onTap: () {
-                                  print('object');
+                                onTap: () async {
+                                  final isDone = await Provider.of<DBHelper>(
+                                          context,
+                                          listen: false)
+                                      .punchIn();
+                                  if (isDone) {
+                                    Navigator.of(context).pop();
+                                    Fluttertoast.showToast(
+                                        msg: 'attendance registered');
+                                  } else {
+                                    Fluttertoast.showToast(msg: 'failed');
+                                  }
                                 },
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
@@ -89,8 +93,6 @@ class EmployeeHomePage extends StatelessWidget {
                           );
                         });
                   },
-                  // () => Navigator.of(context)
-                  //     .pushNamed(AttendaceScreen.routeName),
                   icon: Icon(Icons.event)),
               IconButton(
                   onPressed: () => Navigator.of(context)

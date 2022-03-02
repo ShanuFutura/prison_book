@@ -28,7 +28,10 @@ class PrisonsListView extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: AssetImage('assets/avatar.png'),
+                      backgroundImage: NetworkImage(
+                          Provider.of<DBHelper>(context).urlS +
+                              'images/' +
+                              prisonersList[index]['photo']),
                     ),
                     title: Text(prisonersList[index]['prisoner_name']),
                     // subtitle: Text('prisoner number'),
