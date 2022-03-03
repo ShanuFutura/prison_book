@@ -62,8 +62,8 @@ class OfficerDrawer extends StatelessWidget {
             title: Text('Employees'),
             trailing: Icon(Icons.badge),
             onTap: () {
-              Navigator.of(context).pushNamed(EmployeesListScreen.routeName);
               Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(EmployeesListScreen.routeName);
             },
           ),
           Divider(),

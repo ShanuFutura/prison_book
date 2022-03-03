@@ -173,7 +173,7 @@ class DBHelper extends ChangeNotifier {
     try {
       final res = await post(Uri.parse(urlS + 'add_attandance.php'), body: {
         'emp_id': employeeId.toString(),
-        'date': DateFormat('dd/MM/yyyy').format(DateTime.now())
+        'date': DateFormat('yyyy-MM-dd').format(DateTime.now())
       });
       if (jsonDecode(res.body)['message'] == 'Successfully added') {
         final pref = await SharedPreferences.getInstance();
@@ -241,7 +241,7 @@ class DBHelper extends ChangeNotifier {
 
   Future<dynamic> getParolsList() async {
     final res = await get(Uri.parse(urlS + 'parole_list.php'));
-    print(res.body);
+    print('........'+res.body);
 
     return jsonDecode(res.body);
   }
@@ -249,6 +249,12 @@ class DBHelper extends ChangeNotifier {
   Future<dynamic> getMaliciousList() async {
     final res = await get(Uri.parse(urlS + 'mal_activity_list.php'));
     print('malicious : ' + res.body);
+    return jsonDecode(res.body);
+  }
+
+  Future<dynamic> getAttendanceList() async {
+    final res = await get(Uri.parse(urlS + 'attandance_list.php'));
+    print('attendance : ' + res.body);
     return jsonDecode(res.body);
   }
 }

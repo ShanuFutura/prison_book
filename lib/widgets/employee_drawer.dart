@@ -90,8 +90,8 @@ class EmployeeDrawer extends StatelessWidget {
             ),
             Divider(),
             ListTile(
-              onTap: () => Navigator.of(context)
-                  .pushNamed(EmployeesListScreen.routeName),
+              onTap: () =>
+                  Navigator.of(context).pushNamed(EmployeesListScreen.routeName),
               title: Text('View Employees'),
               trailing: Icon(Icons.reorder),
             ),
