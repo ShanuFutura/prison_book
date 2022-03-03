@@ -239,8 +239,16 @@ class DBHelper extends ChangeNotifier {
     return imageFile;
   }
 
-  getParolsList() async {
+  Future<dynamic> getParolsList() async {
     final res = await get(Uri.parse(urlS + 'parole_list.php'));
     print(res.body);
+
+    return jsonDecode(res.body);
+  }
+
+  Future<dynamic> getMaliciousList() async {
+    final res = await get(Uri.parse(urlS + 'mal_activity_list.php'));
+    print('malicious : ' + res.body);
+    return jsonDecode(res.body);
   }
 }
