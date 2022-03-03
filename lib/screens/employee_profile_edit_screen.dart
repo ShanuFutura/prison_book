@@ -38,46 +38,46 @@ class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
     );
   }
 
-  Future<void> _takePicture(BuildContext context) async {
-    setState(() {
-      isLoading = true;
-    });
-    final picker = ImagePicker();
+  // Future<void> _takePicture(BuildContext context) async {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   final picker = ImagePicker();
 
-    final imageFile =
-        await picker.pickImage(source: ImageSource.camera, maxWidth: 600);
-    if (imageFile == null) {
-      setState(() {
-        isLoading = false;
-      });
-      return;
-    }
-    setState(() {
-      // isLoading = false;
-      _storedImage = File(imageFile.path);
-    });
-    if (_storedImage != null) {
-      Provider.of<DBHelper>(context, listen: false).EmployeeProfileImage =
-          _storedImage!;
-    }
+  //   final imageFile =
+  //       await picker.pickImage(source: ImageSource.camera, maxWidth: 600);
+  //   if (imageFile == null) {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //     return;
+  //   }
+  //   setState(() {
+  //     // isLoading = false;
+  //     _storedImage = File(imageFile.path);
+  //   });
+  //   if (_storedImage != null) {
+  //     Provider.of<DBHelper>(context, listen: false).EmployeeProfileImage =
+  //         _storedImage!;
+  //   }
 
-    // final appDir = await getApplicationDocumentsDirectory();
+  // final appDir = await getApplicationDocumentsDirectory();
 
-    // final fileName = basename(imageFile.path);
+  // final fileName = basename(imageFile.path);
 
-    // final savedImage =
-    //     await File(imageFile.path).copy('${appDir.path}/$fileName');
-    // setState(() {
-    //   isLoading = false;
-    // });
-    // showDialog(
-    //     context: context,
-    //     builder: (BuildContext ctx) {
-    //       return imageFileInputDialog(savedImage);
-    //     });
+  // final savedImage =
+  //     await File(imageFile.path).copy('${appDir.path}/$fileName');
+  // setState(() {
+  //   isLoading = false;
+  // });
+  // showDialog(
+  //     context: context,
+  //     builder: (BuildContext ctx) {
+  //       return imageFileInputDialog(savedImage);
+  //     });
 
-    // print(DummyLists.oldPrescImages.toString());
-  }
+  // print(DummyLists.oldPrescImages.toString());
+  // }
 
   trySubmit(BuildContext context) async {
     if (_gender == null) {
@@ -111,8 +111,8 @@ class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    File? profileImage =
-        Provider.of<DBHelper>(context).getEmployeeProfileImage();
+    // File? profileImage =
+    //     Provider.of<DBHelper>(context).getEmployeeProfileImage();
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
@@ -130,7 +130,6 @@ class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
                 child: CircularProgressIndicator(),
               );
             } else if (!snap.hasData) {
-              
               return Center(
                 child: Text(
                     'Something went wrong please check your connection...'),
@@ -153,18 +152,23 @@ class _EmployeeProfileEditScreenState extends State<EmployeeProfileEditScreen> {
                             children: [
                               CircleAvatar(
                                 radius: 80,
-                                backgroundImage: profileImage == null
-                                    ? AssetImage('assets/avatar.png')
-                                        as ImageProvider
-                                    : FileImage(profileImage),
+                                backgroundImage:
+                                    (snap.data as Map)['photo'] == null
+                                        ? AssetImage('assets/avatar.png')
+                                            as ImageProvider
+                                        : NetworkImage(
+                                            Provider.of<DBHelper>(context)
+                                                    .urlForEMployeeImageFetch +
+                                                'assets/images/' +
+                                                (snap.data as Map)['photo']),
                               ),
-                              CircleAvatar(
-                                  backgroundColor: Colors.grey,
-                                  child: IconButton(
-                                      onPressed: () {
-                                        _takePicture(context);
-                                      },
-                                      icon: Icon(Icons.edit))),
+                              // CircleAvatar(
+                              //     backgroundColor: Colors.grey,
+                              //     child: IconButton(
+                              //         onPressed: () {
+                              //           _takePicture(context);
+                              //         },
+                              //         icon: Icon(Icons.edit))),
                             ],
                           ),
                         ),

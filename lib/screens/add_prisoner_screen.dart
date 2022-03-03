@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:prisonbook/models/db_helper.dart';
-import 'package:prisonbook/widgets/add_prisoner_sliver_appbar.dart';
+// import 'package:prisonbook/widgets/add_prisoner_sliver_appbar.dart';
 import 'package:provider/provider.dart';
 
 class AddPrisonerScreen extends StatefulWidget {
@@ -164,6 +164,7 @@ class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
                             color: Colors.black.withOpacity(.1),
                             padding: EdgeInsets.all(5),
                             child: TextFormField(
+                              keyboardType: TextInputType.number,
                               decoration: InputDecoration(label: Text('age')),
                               validator: (v) {
                                 if (v!.trim().isEmpty) {
@@ -242,6 +243,7 @@ class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
                               color: Colors.black.withOpacity(.1),
                               padding: EdgeInsets.all(5),
                               child: TextFormField(
+                                keyboardType: TextInputType.number,
                                 decoration:
                                     InputDecoration(label: Text('section')),
                                 validator: (v) {
@@ -260,6 +262,7 @@ class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
                       greyContainerBuilder(
                         TextFormField(
                           decoration: InputDecoration(label: Text('cell.no')),
+                          keyboardType: TextInputType.number,
                           validator: (v) {
                             if (v!.trim().isEmpty) {
                               return 'cell number cannot be empty';

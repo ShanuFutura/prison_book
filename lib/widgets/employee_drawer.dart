@@ -43,11 +43,34 @@ class EmployeeDrawer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Stack(alignment: Alignment.bottomRight, children: [
-                      CircleAvatar(
-                          radius: 80,
-                          backgroundImage: profileImage == null
-                              ? AssetImage('assets/avatar.png') as ImageProvider
-                              : FileImage(profileImage)),
+                      FutureBuilder(
+                          future: Provider.of<DBHelper>(context)
+                              .getProfileDetailsToView(),
+                          builder: (context, snap) {
+                            if (snap.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircleAvatar(
+                                  radius: 80,
+                                  backgroundImage:
+                                      AssetImage('assets/avatar.png')
+                                          as ImageProvider);
+                            } else if (snap.connectionState ==
+                                ConnectionState.done) {
+                              return CircleAvatar(
+                                  radius: 80,
+                                  backgroundImage: NetworkImage(
+                                      Provider.of<DBHelper>(context)
+                                              .urlForEMployeeImageFetch +
+                                          'assets/images/' +
+                                          (snap.data as Map)['photo']));
+                            } else {
+                              return const CircleAvatar(
+                                  radius: 80,
+                                  backgroundImage:
+                                      AssetImage('assets/avatar.png')
+                                          as ImageProvider);
+                            }
+                          }),
                       GestureDetector(
                         onTap: () => Navigator.of(context)
                             .pushNamed(EmployeeProfileEditScreen.routeName),
@@ -88,28 +111,28 @@ class EmployeeDrawer extends StatelessWidget {
               trailing: Icon(Icons.chat),
             ),
             Divider(),
-            ListTile(
-              onTap: () {
-                Navigator.of(context).pushNamed(AttendaceScreen.routeName);
-              },
-              title: Text('Attendance'),
-              trailing: Icon(Icons.event),
-            ),
-            Divider(),
-            ListTile(
-              onTap: () {},
-              title: Text('Critical health prisoners'),
-              trailing: Icon(Icons.medical_services),
-            ),
-            Divider(),
-            ListTile(
-              onTap: () {
-                // Provider.of<DBHelper>(context).toggleTheme();
-              },
-              title: Text('theme'),
-              trailing: Icon(Icons.nightlight),
-            ),
-            Divider(),
+            // ListTile(
+            //   onTap: () {
+            //     Navigator.of(context).pushNamed(AttendaceScreen.routeName);
+            //   },
+            //   title: Text('Attendance'),
+            //   trailing: Icon(Icons.event),
+            // ),
+            // Divider(),
+            // ListTile(
+            //   onTap: () {},
+            //   title: Text('Critical health prisoners'),
+            //   trailing: Icon(Icons.medical_services),
+            // ),
+            // Divider(),
+            // ListTile(
+            //   onTap: () {
+            //     // Provider.of<DBHelper>(context).toggleTheme();
+            //   },
+            //   title: Text('theme'),
+            //   trailing: Icon(Icons.nightlight),
+            // ),
+            // Divider(),
             ListTile(
               title: Text('logout'),
               trailing: Icon(Icons.logout),

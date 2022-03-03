@@ -71,8 +71,8 @@ class OfficerDrawer extends StatelessWidget {
             title: Text('Attendance'),
             trailing: Icon(Icons.calendar_today),
             onTap: () {
-              Navigator.of(context).pushNamed(OfficerAttendanceView.routeName);
               Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(OfficerAttendanceView.routeName);
             },
           ),
           Divider(),
@@ -80,8 +80,8 @@ class OfficerDrawer extends StatelessWidget {
             title: Text('Parols'),
             trailing: Icon(Icons.meeting_room),
             onTap: () {
-              Navigator.of(context).pushNamed(ParolList.routeName);
               Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(ParolList.routeName);
             },
           ),
           Divider(),
@@ -89,8 +89,8 @@ class OfficerDrawer extends StatelessWidget {
             title: Text('feedback'),
             trailing: Icon(Icons.feedback),
             onTap: () {
-              Navigator.of(context).pushNamed(FeedBackScreen.routeName);
               Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(FeedBackScreen.routeName);
               // Navigator.push(context, MaterialPageRoute(builder: Empl));
             },
           ),

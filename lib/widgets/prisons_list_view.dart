@@ -16,7 +16,8 @@ class PrisonsListView extends StatelessWidget {
             return Center(
               child: CircularProgressIndicator(),
             );
-          } else if (snap.connectionState == ConnectionState.done) {
+          } else if (snap.hasData) {
+            
             final prisonersList = Provider.of<DBHelper>(context).prisonersList;
 
             return ListView.builder(

@@ -177,32 +177,34 @@ class MainPrisonerView extends StatelessWidget {
                             Chip(label: Text((snap.data as Map)['section_no']))
                           ],
                         )),
-                        Row(
-                          children: [
-                            Expanded(
-                                child: ListTile(
-                              title: Row(
-                                children: [
-                                  Text('entry'),
-                                  SizedBox(width: deviceWidth * .04),
-                                  Chip(
-                                      label: Text(
-                                          (snap.data as Map)['entry_date']))
-                                ],
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Text('entry'),
+                                    SizedBox(width: deviceWidth * .04),
+                                    Chip(
+                                        label: Text(
+                                            (snap.data as Map)['entry_date']))
+                                  ],
+                                ),
                               ),
-                            )),
-                            Expanded(
-                                child: ListTile(
-                                    title: Row(
-                              children: [
-                                Text('release'),
-                                SizedBox(width: deviceWidth * .04),
-                                Chip(
-                                    label: Text(
-                                        (snap.data as Map)['releasing_date']))
-                              ],
-                            ))),
-                          ],
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Text('release'),
+                                    SizedBox(width: deviceWidth * .04),
+                                    Chip(
+                                        label: Text((snap.data
+                                            as Map)['releasing_date']))
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Center(
                           child: Container(

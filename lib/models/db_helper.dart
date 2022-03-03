@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DBHelper extends ChangeNotifier {
   final String urlS = 'http://192.168.29.77/prison/API/';
+  final String urlForEMployeeImageFetch = 'http://192.168.29.77/prison/';
 
   File? EmployeeProfileImage;
 
@@ -39,12 +40,12 @@ class DBHelper extends ChangeNotifier {
     return jsonDecode(res.body);
   }
 
-  Future<void> fetchAndSetPrisonersList() async {
+  Future<List> fetchAndSetPrisonersList() async {
     final res = await get(Uri.parse(urlS + 'prisoner_list.php'));
     prisonersList = jsonDecode(res.body);
     print('list fetch :' + prisonersList[0]['photo']);
-    // return prisonersList as List<Map>;
-    // notifyListeners();
+
+    return prisonersList;
   }
 
   File? getEmployeeProfileImage() {
@@ -170,11 +171,16 @@ class DBHelper extends ChangeNotifier {
 
   Future<bool> punchIn() async {
     try {
-      final res = await post(Uri.parse(urlS + 'add_attandanc.php'), body: {
+      final res = await post(Uri.parse(urlS + 'add_attandance.php'), body: {
         'emp_id': employeeId.toString(),
-        'date': DateFormat('dd/mm/yyyy').format(DateTime.now())
+        'date': DateFormat('dd/MM/yyyy').format(DateTime.now())
       });
-      print(res.body);
+      if (jsonDecode(res.body)['message'] == 'Successfully added') {
+        final pref = await SharedPreferences.getInstance();
+        pref.setString(
+            'attend', DateFormat('dd/MM/yyyy').format(DateTime.now()));
+      }
+      print('attend________' + res.body);
       return (jsonDecode(res.body)['message'] == 'Successfully added');
     } on Exception catch (error) {
       return false;
@@ -226,9 +232,15 @@ class DBHelper extends ChangeNotifier {
 
   Future<File?> pickImage() async {
     final picker = ImagePicker();
-    final tempImageFile = await picker.pickImage(source: ImageSource.gallery);
+    final tempImageFile =
+        await picker.pickImage(source: ImageSource.gallery, imageQuality: 30);
     final imageFile = File(tempImageFile!.path);
     print(imageFile.path);
     return imageFile;
+  }
+
+  getParolsList() async {
+    final res = await get(Uri.parse(urlS + 'parole_list.php'));
+    print(res.body);
   }
 }

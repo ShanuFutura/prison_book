@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 import 'package:prisonbook/models/db_helper.dart';
 import 'package:prisonbook/screens/add_prisoner_screen.dart';
@@ -8,6 +9,7 @@ import 'package:prisonbook/widgets/employee_drawer.dart';
 import 'package:prisonbook/widgets/prisons_list_view.dart';
 
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EmployeeHomePage extends StatelessWidget {
   const EmployeeHomePage({Key? key}) : super(key: key);
@@ -53,7 +55,11 @@ class EmployeeHomePage extends StatelessWidget {
             expandedHeight: fullHeight * .27,
             actions: [
               IconButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    final pref = await SharedPreferences.getInstance();
+                    // pref.remove('attend');
+                    final isPunched = (pref.getString('attend') ==
+                        DateFormat('dd/MM/yyyy').format(DateTime.now()));
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -70,6 +76,7 @@ class EmployeeHomePage extends StatelessWidget {
                                     Navigator.of(context).pop();
                                     Fluttertoast.showToast(
                                         msg: 'attendance registered');
+                                  // pref.remove('attend');
                                   } else {
                                     Fluttertoast.showToast(msg: 'failed');
                                   }
@@ -77,12 +84,15 @@ class EmployeeHomePage extends StatelessWidget {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
+                                  children: [
                                     Padding(
                                       padding: EdgeInsets.all(20.0),
                                       child: Icon(
                                         Icons.verified,
                                         size: 60,
+                                        color: isPunched
+                                            ? Colors.blue
+                                            : Colors.white,
                                       ),
                                     ),
                                     Text('Punch in'),
