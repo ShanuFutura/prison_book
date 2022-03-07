@@ -20,29 +20,8 @@ class ImageUpload {
     required String gender,
     required String section,
   }) async {
-    var ret = false;
-    print(
-      'name:' +
-          name +
-          ''',imageFile:''' +
-          imageFile.toString() +
-          ''',crime:''' +
-          crime +
-          ',entryDate:' +
-          entryDate.toString() +
-          ',release:' +
-          releaseDate.toString() +
-          ',age:' +
-          age +
-          ',address:' +
-          address +
-          ',cellno:' +
-          cellNo +
-          ',gender:' +
-          gender +
-          ''', section:''' +
-          section,
-    );
+    var ret;
+
     var stream = new ByteStream(DelegatingStream.typed(imageFile.openRead()));
     var length = await imageFile.length();
 
@@ -67,13 +46,12 @@ class ImageUpload {
     request.files.add(multipartFile);
     var response = await request.send();
     print(response.statusCode);
-    response.stream.transform(utf8.decoder).listen((value) {
+
+     response.stream.transform(utf8.decoder).listen((value) {
       print(jsonDecode(value)['message']);
-      if (jsonDecode(value)['message'] == 'Successfully added') {
-        ret = true;
-      } else
-        ret = false;
+      
     });
+    if(response.statusCode==200){ ret = true;}else{ ret = false;}
     return ret;
   }
 }

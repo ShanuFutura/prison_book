@@ -39,7 +39,12 @@ class PrisonBook extends StatelessWidget {
       create: (context) => DBHelper(),
       // builder: (context){},
       child: MaterialApp(
-        theme: ThemeData.dark(),
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
+        ),
+        darkTheme: ThemeData(brightness: Brightness.dark),
+        themeMode: ThemeMode.dark,
         home: FutureBuilder(
             future: getType(),
             builder: (context, snap) {
@@ -48,12 +53,13 @@ class PrisonBook extends StatelessWidget {
                 LoadingPage();
               } else if (snap.data == 'officer') {
                 print('officer detected');
-                Provider.of<DBHelper>(context).fetchAndSetEmpId();
+                Provider.of<DBHelper>(context).fetchAndSetUserId();
+                Provider.of<DBHelper>(context).fetchOfficersDetails();
                 return OfficerHomePage();
               } else if (snap.data == 'employeee') {
                 print('employee detected');
                 // Provider.of<DBHelper>(context).fetchAndSetPrisonersList();
-                Provider.of<DBHelper>(context).fetchAndSetEmpId();
+                Provider.of<DBHelper>(context).fetchAndSetUserId();
                 // Provider.of<DBHelper>(context).fetchAndSetOfficersList();
                 return EmployeeHomePage();
               } else {

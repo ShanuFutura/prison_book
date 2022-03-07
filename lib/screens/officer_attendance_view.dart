@@ -39,8 +39,9 @@ class OfficerAttendanceView extends StatelessWidget {
                       return ListTile(
                         leading: CircleAvatar(
                           backgroundImage: NetworkImage(
-                              Provider.of<DBHelper>(context).urlS +
-                                  'images/' +
+                              Provider.of<DBHelper>(context)
+                                      .urlForEMployeeImageFetch +
+                                  'assets/images/' +
                                   (snap.data as dynamic)[index]['photo']),
                         ),
                         title: Text((snap.data as dynamic)[index]['name']),

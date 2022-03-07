@@ -32,14 +32,14 @@ class PrisonerViewSliverAppbar extends StatelessWidget {
                 padding: EdgeInsets.all(7.0),
                 child: Chip(label: Text(dataMap['prisoner_name'])),
               ),
-              Padding(
-                padding: EdgeInsets.all(7.0),
-                child: Text('age'),
-              ),
-              Padding(
-                padding: EdgeInsets.all(7.0),
-                child: Text('gender'),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.all(7.0),
+              //   child: Text('age'),
+              // ),
+              // Padding(
+              //   padding: EdgeInsets.all(7.0),
+              //   child: Text('gender'),
+              // ),
               Padding(
                 padding: EdgeInsets.all(7.0),
                 child: Chip(label: Text('cell no: ' + dataMap['cell_no'])),

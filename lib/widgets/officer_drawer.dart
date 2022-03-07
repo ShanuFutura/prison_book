@@ -18,8 +18,8 @@ class OfficerDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    File? profileImage =
-        Provider.of<DBHelper>(context).getOfficerProfileImage();
+    String? profileImage =
+        Provider.of<DBHelper>(context).officersDetails==null? null :Provider.of<DBHelper>(context).officersDetails['photo'];
     return Drawer(
       child: Column(
         children: [
@@ -35,7 +35,10 @@ class OfficerDrawer extends StatelessWidget {
                     CircleAvatar(
                       radius: 80,
                       backgroundImage: profileImage != null
-                          ? FileImage(profileImage) as ImageProvider
+                          ? NetworkImage(Provider.of<DBHelper>(context)
+                                  .urlForEMployeeImageFetch +
+                              'assets/images/' +
+                              profileImage) as ImageProvider
                           : AssetImage(
                               'assets/avatar.png',
                             ),

@@ -18,50 +18,57 @@ class _OfficerProfileEditScreenState extends State<OfficerProfileEditScreen> {
   var _gender = '';
   var position;
   var state;
+  var name;
+  var address;
+  var age;
+  var phone;
+  var email;
+  // var position;
+
   final formKey = GlobalKey<FormState>();
 
   File? _storedImage;
 
-  Future<void> _takePicture(BuildContext context) async {
-    // setState(() {
-    //   isLoading = true;
-    // });
-    final picker = ImagePicker();
+  // Future<void> _takePicture(BuildContext context) async {
+  //   // setState(() {
+  //   //   isLoading = true;
+  //   // });
+  //   final picker = ImagePicker();
 
-    final imageFile =
-        await picker.pickImage(source: ImageSource.camera, maxWidth: 600);
-    if (imageFile == null) {
-      // setState(() {
-      //   isLoading = false;
-      // });
-      return;
-    }
-    setState(() {
-      // isLoading = false;
-      _storedImage = File(imageFile.path);
-    });
-    if (_storedImage != null) {
-      Provider.of<DBHelper>(context, listen: false).officerProfileImage =
-          _storedImage!;
-    }
+  //   final imageFile =
+  //       await picker.pickImage(source: ImageSource.camera, maxWidth: 600);
+  //   if (imageFile == null) {
+  //     // setState(() {
+  //     //   isLoading = false;
+  //     // });
+  //     return;
+  //   }
+  //   setState(() {
+  //     // isLoading = false;
+  //     _storedImage = File(imageFile.path);
+  //   });
+  //   if (_storedImage != null) {
+  //     Provider.of<DBHelper>(context, listen: false).officerProfileImage =
+  //         _storedImage!;
+  //   }
 
-    // final appDir = await getApplicationDocumentsDirectory();
+  //   // final appDir = await getApplicationDocumentsDirectory();
 
-    // final fileName = basename(imageFile.path);
+  //   // final fileName = basename(imageFile.path);
 
-    // final savedImage =
-    //     await File(imageFile.path).copy('${appDir.path}/$fileName');
-    // setState(() {
-    //   isLoading = false;
-    // });
-    // showDialog(
-    //     context: context,
-    //     builder: (BuildContext ctx) {
-    //       return imageFileInputDialog(savedImage);
-    //     });
+  //   // final savedImage =
+  //   //     await File(imageFile.path).copy('${appDir.path}/$fileName');
+  //   // setState(() {
+  //   //   isLoading = false;
+  //   // });
+  //   // showDialog(
+  //   //     context: context,
+  //   //     builder: (BuildContext ctx) {
+  //   //       return imageFileInputDialog(savedImage);
+  //   //     });
 
-    // print(DummyLists.oldPrescImages.toString());
-  }
+  //   // print(DummyLists.oldPrescImages.toString());
+  // }
 
   Widget greyContainerBuilder(Widget child) {
     return Padding(
@@ -78,18 +85,23 @@ class _OfficerProfileEditScreenState extends State<OfficerProfileEditScreen> {
   }
 
   trySubmit() {
-    formKey.currentState!.validate();
-    if (formKey.currentState!.validate()) {}
+    // formKey.currentState!.validate();
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+      Provider.of<DBHelper>(context, listen: false)
+          .updateOfficerProfile(name, age, address, email, phone);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    File? profileImage =
-        Provider.of<DBHelper>(context).getOfficerProfileImage();
+     String? profileImage =
+        Provider.of<DBHelper>(context).officersDetails==null? null :Provider.of<DBHelper>(context).officersDetails['photo'];
+    final dynamic? officerDetails = Provider.of<DBHelper>(context).officersDetails;
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: trySubmit,
         child: Icon(Icons.done),
       ),
       appBar: AppBar(
@@ -109,34 +121,34 @@ class _OfficerProfileEditScreenState extends State<OfficerProfileEditScreen> {
                     CircleAvatar(
                       radius: 80,
                       backgroundImage: profileImage != null
-                          ? FileImage(profileImage) as ImageProvider
+                          ? NetworkImage(Provider.of<DBHelper>(context)
+                                  .urlForEMployeeImageFetch +
+                              'assets/images/' +
+                              profileImage) as ImageProvider
                           : AssetImage(
                               'assets/avatar.png',
                             ),
                     ),
-                    GestureDetector(
-                        onTap: () {
-                          _takePicture(context);
-                        },
-                        child: const CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          child: Icon(Icons.edit),
-                        ))
                   ],
                 ),
                 const SizedBox(height: 20),
                 greyContainerBuilder(
                   TextFormField(
+                    initialValue: officerDetails['officer_name'],
                     decoration: InputDecoration(label: Text('name')),
                     validator: (v) {
                       if (v!.isEmpty) {
                         return "name cannot be empty";
                       }
                     },
+                    onSaved: (v) {
+                      name = v;
+                    },
                   ),
                 ),
                 greyContainerBuilder(
                   TextFormField(
+                    initialValue: officerDetails['address'],
                     decoration: InputDecoration(label: Text('address')),
                     maxLines: 5,
                     validator: (v) {
@@ -144,51 +156,41 @@ class _OfficerProfileEditScreenState extends State<OfficerProfileEditScreen> {
                         return "address cannot be empty";
                       }
                     },
+                    onSaved: (v) {
+                      address = v;
+                    },
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      width: 70,
-                      color: Colors.black.withOpacity(.1),
-                      padding: EdgeInsets.all(5),
-                      child: TextFormField(
-                        validator: (v) {
-                          if (v!.isEmpty) {
-                            return "age cannot be empty";
-                          } else if (int.parse(v) > 120 || int.parse(v) < 0) {
-                            return 'enter a valid age';
-                          }
-                        },
-                        decoration: InputDecoration(label: Text('age')),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 70,
+                        color: Colors.black.withOpacity(.1),
+                        padding: EdgeInsets.all(5),
+                        child: TextFormField(
+                          initialValue: officerDetails['age'],
+                          validator: (v) {
+                            if (v!.isEmpty) {
+                              return "age cannot be empty";
+                            } else if (int.parse(v) > 120 || int.parse(v) < 0) {
+                              return 'enter a valid age';
+                            }
+                          },
+                          onSaved: (v) {
+                            age = int.parse(v!);
+                          },
+                          decoration: InputDecoration(label: Text('age')),
+                        ),
                       ),
-                    ),
-                    Container(
-                      color: Colors.black.withOpacity(.1),
-                      padding: EdgeInsets.all(5),
-                      child: DropdownButton(
-                          hint: Text(_gender == '' ? 'gender' : _gender),
-                          items: const [
-                            DropdownMenuItem(
-                              child: Text('male'),
-                              value: 'male',
-                            ),
-                            DropdownMenuItem(
-                              child: Text('female'),
-                              value: 'female',
-                            )
-                          ],
-                          onChanged: (val) {
-                            setState(() {
-                              _gender = val.toString();
-                            });
-                          }),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 greyContainerBuilder(
                   TextFormField(
+                    initialValue: officerDetails['officer_name'],
                     decoration: InputDecoration(label: Text('phone')),
                     validator: (v) {
                       if (v!.isEmpty) {
@@ -197,10 +199,14 @@ class _OfficerProfileEditScreenState extends State<OfficerProfileEditScreen> {
                         return 'enter a valid phone number';
                       }
                     },
+                    onSaved: (v) {
+                      phone = v;
+                    },
                   ),
                 ),
                 greyContainerBuilder(
                   TextFormField(
+                    initialValue: officerDetails['email_id'],
                     decoration: InputDecoration(label: Text('email')),
                     validator: (v) {
                       if (v!.isEmpty) {
@@ -211,54 +217,10 @@ class _OfficerProfileEditScreenState extends State<OfficerProfileEditScreen> {
                         return 'email is badly formated';
                       }
                     },
+                    onSaved: (v) {
+                      email = v;
+                    },
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      color: Colors.black.withOpacity(.1),
-                      padding: EdgeInsets.all(5),
-                      child: DropdownButton(
-                          hint: Text(position == null ? 'position' : position),
-                          items: const [
-                            DropdownMenuItem(
-                              child: Text('position 1'),
-                              value: 'position 1',
-                            ),
-                            DropdownMenuItem(
-                              child: Text('position 2'),
-                              value: 'position 2',
-                            )
-                          ],
-                          onChanged: (val) {
-                            setState(() {
-                              position = val.toString();
-                            });
-                          }),
-                    ),
-                    Container(
-                      color: Colors.black.withOpacity(.1),
-                      padding: EdgeInsets.all(5),
-                      child: DropdownButton(
-                          hint: Text(state == null ? 'state' : state),
-                          items: const [
-                            DropdownMenuItem(
-                              child: Text('kerala'),
-                              value: 'kerala',
-                            ),
-                            DropdownMenuItem(
-                              child: Text('tamilnadu'),
-                              value: 'tamilnadu',
-                            )
-                          ],
-                          onChanged: (val) {
-                            setState(() {
-                              state = val.toString();
-                            });
-                          }),
-                    ),
-                  ],
                 ),
               ],
             ),

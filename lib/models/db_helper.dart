@@ -10,14 +10,12 @@ import 'package:prisonbook/models/image_upload.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DBHelper extends ChangeNotifier {
-  final String urlS = 'http://192.168.29.77/prison/API/';
-  final String urlForEMployeeImageFetch = 'http://192.168.29.77/prison/';
+  final String urlS = 'http://192.168.29.78/prison/API/';
+  final String urlForEMployeeImageFetch = 'http://192.168.29.78/prison/';
 
   File? EmployeeProfileImage;
 
-  File? officerProfileImage;
-
-  var employeeId;
+  var userId;
 
   var employeeList = [];
 
@@ -25,19 +23,28 @@ class DBHelper extends ChangeNotifier {
 
   var prisonerHealthStatus = 'healthy';
 
+  var officersDetails;
+
+  var visitorsList;
+
 //////////////////////////////////////////////////
 
-  fetchAndSetEmpId() async {
+  fetchAndSetUserId() async {
     final pref = await SharedPreferences.getInstance();
-    employeeId = pref.getString('id');
-    print('fetched id : ' + employeeId);
+    userId = pref.getString('id');
+    print('fetched user id : ' + userId);
   }
 
-  Future<dynamic> fetchPrisonerDetails() async {
+  Future<dynamic> fetchPrisonerDetails(String prisonerId) async {
+    print('prinsoner id:'+prisonerId);
     final res = await post(Uri.parse(urlS + 'prison_view.php'),
-        body: {'prisoner_id': '1'});
-    print(res.body);
-    return jsonDecode(res.body);
+        body: {'prisoner_id': prisonerId});
+    print('prison_view:' + res.body);
+    if (jsonDecode(res.body) == 'Failed to View') {
+      return null;
+    } else {
+      return jsonDecode(res.body);
+    }
   }
 
   Future<List> fetchAndSetPrisonersList() async {
@@ -52,11 +59,6 @@ class DBHelper extends ChangeNotifier {
     return EmployeeProfileImage;
   }
 
-  File? getOfficerProfileImage() {
-    // notifyListeners();
-    return officerProfileImage;
-  }
-
   Future<String> loginFn(String username, String password) async {
     try {
       final res = await post(Uri.parse(urlS + 'login.php'),
@@ -66,7 +68,7 @@ class DBHelper extends ChangeNotifier {
       final pref = await SharedPreferences.getInstance();
       pref.setString('type', jsonDecode(res.body)['type']);
       pref.setString('id', jsonDecode(res.body)['id']);
-      // employeeId = jsonDecode(res.body)['id'];
+      // userId = jsonDecode(res.body)['id'];
       return jsonDecode(res.body)['type'];
     } on Exception catch (error) {
       print(error);
@@ -85,7 +87,7 @@ class DBHelper extends ChangeNotifier {
   ) async {
     try {
       final res = await post(Uri.parse(urlS + 'insert_updated_emp.php'), body: {
-        'emp_id': employeeId,
+        'emp_id': userId,
         'emp_name': name,
         'age': age,
         'address': address,
@@ -108,7 +110,7 @@ class DBHelper extends ChangeNotifier {
   Future<bool> feedBackSend(String message) async {
     try {
       final res = await post(Uri.parse(urlS + 'add_feedback.php'),
-          body: {'id': employeeId.toString(), 'feedback': message});
+          body: {'id': userId.toString(), 'feedback': message});
       print(res.body);
 
       // Fluttertoast.showToast(msg: 'feedback sent');
@@ -150,7 +152,7 @@ class DBHelper extends ChangeNotifier {
           body: {'prisoner_id': prisonerId, 'status': healthStatus});
       prisonerHealthStatus = healthStatus;
       notifyListeners();
-      Fluttertoast.showToast(msg: 'health status upfdated');
+      Fluttertoast.showToast(msg: 'health status updated');
       print(res.body);
     } on Exception catch (err) {
       print(err);
@@ -172,7 +174,7 @@ class DBHelper extends ChangeNotifier {
   Future<bool> punchIn() async {
     try {
       final res = await post(Uri.parse(urlS + 'add_attandance.php'), body: {
-        'emp_id': employeeId.toString(),
+        'emp_id': userId.toString(),
         'date': DateFormat('yyyy-MM-dd').format(DateTime.now())
       });
       if (jsonDecode(res.body)['message'] == 'Successfully added') {
@@ -187,7 +189,7 @@ class DBHelper extends ChangeNotifier {
     }
   }
 
-  addPrisoner({
+  Future<bool> addPrisoner({
     required String name,
     required String crime,
     required DateTime entry_date,
@@ -241,7 +243,7 @@ class DBHelper extends ChangeNotifier {
 
   Future<dynamic> getParolsList() async {
     final res = await get(Uri.parse(urlS + 'parole_list.php'));
-    print('........'+res.body);
+    print('........' + res.body);
 
     return jsonDecode(res.body);
   }
@@ -255,6 +257,38 @@ class DBHelper extends ChangeNotifier {
   Future<dynamic> getAttendanceList() async {
     final res = await get(Uri.parse(urlS + 'attandance_list.php'));
     print('attendance : ' + res.body);
+    return jsonDecode(res.body);
+  }
+
+  Future<dynamic> fetchOfficersDetails() async {
+    final res = await post(Uri.parse(urlS + 'officer_view.php'),
+        body: {'officer_id': '5'});
+    print('officers details' + res.body);
+    officersDetails = jsonDecode(res.body);
+  }
+
+  Future<void> updateOfficerProfile(
+      String name, int age, String address, String email, String mobile) async {
+    final res =
+        await post(Uri.parse(urlS + 'insert_updated_officer.php'), body: {
+      'officer_id': '2',
+      'officer_name': name,
+      'age': age.toString(),
+      'address': address,
+      'email_id': email,
+      'mobile_number': mobile,
+    });
+    print(res.body);
+  }
+
+  Future<dynamic> getVisitorsList(String prisonerId) async {
+    final res = await post(Uri.parse(urlS + 'visitors_list.php'),
+        body: {'prisoner_id': prisonerId});
+        if(jsonDecode(res.body)['message']!='failed'){
+
+    visitorsList = jsonDecode(res.body);
+        }
+    print('visitors' + res.body);
     return jsonDecode(res.body);
   }
 }

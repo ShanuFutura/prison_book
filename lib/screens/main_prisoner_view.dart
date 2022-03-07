@@ -12,7 +12,9 @@ class MainPrisonerView extends StatelessWidget {
   // const MainPrisonerView({Key? key}) : super(key: key);
 
   static const String routeName = 'main prisoner view';
+
   var snapForAppBar;
+
   var prisonerId;
 
   healthDialogCard(BuildContext context) {
@@ -52,59 +54,56 @@ class MainPrisonerView extends StatelessWidget {
   }
 
   maliciouseShowDialog(BuildContext context) {
-    var activity;
+    final malController = TextEditingController();
+
     showDialog(
         context: context,
         builder: (BuildContext ctx) {
-          return Dialog(
-              child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                DropdownButton(
-                    hint: Text('malicious act type'),
-                    items: const [
-                      DropdownMenuItem(
-                        child: Text('prison break attempt'),
-                        value: 'prison break attempt',
-                      ),
-                      DropdownMenuItem(
-                        child: Text('violence'),
-                        value: 'violence',
-                      ),
-                      DropdownMenuItem(
-                        child: Text('theft'),
-                        value: 'theft',
-                      ),
+          return Builder(builder: (context) {
+            return Dialog(
+                child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * .7,
+                    color: Colors.black.withOpacity(.1),
+                    padding: EdgeInsets.all(5),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          label: Text('malicious activity type')),
+                      // keyboardType: TextInputType.number,
+                      controller: malController,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // ElevatedButton(onPressed: () {}, child: Text('date')),
+                      IconButton(
+                          onPressed: () async {
+                            print(malController.text);
+                            final res = await Provider.of<DBHelper>(context,
+                                    listen: false)
+                                .reportMaliciousActivity(
+                                    prisonerId, malController.text);
+                            if (res == 'Successfully reported') {
+                              Fluttertoast.showToast(
+                                  msg: 'added malicious activity');
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          icon: Icon(Icons.done)),
                     ],
-                    onChanged: (val) {
-                      activity = val;
-                    }),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // ElevatedButton(onPressed: () {}, child: Text('date')),
-                    IconButton(
-                        onPressed: () async {
-                          final res = await Provider.of<DBHelper>(context,
-                                  listen: false)
-                              .reportMaliciousActivity(prisonerId, activity);
-                          if (res == 'Successfully reported') {
-                            Fluttertoast.showToast(
-                                msg: 'added malicious activity');
-                            Navigator.of(context).pop();
-                          }
-                        },
-                        icon: Icon(Icons.done)),
-                  ],
-                ),
-              ],
-            ),
-          ));
+                  ),
+                ],
+              ),
+            ));
+          });
         });
   }
 
@@ -127,7 +126,8 @@ class MainPrisonerView extends StatelessWidget {
         child: Icon(Icons.report),
       ),
       body: FutureBuilder(
-          future: Provider.of<DBHelper>(context).fetchPrisonerDetails(),
+          future:
+              Provider.of<DBHelper>(context).fetchPrisonerDetails(prisonerId),
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.waiting) {
               return Center(
@@ -155,144 +155,176 @@ class MainPrisonerView extends StatelessWidget {
                   flexibleSpace: PrisonerViewSliverAppbar(snap.data as Map),
                 ),
                 SliverFillRemaining(
-                  child: SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ListTile(
-                          title: Row(
-                            children: [
-                              Text('Crime'),
-                              const SizedBox(width: 30),
-                              Chip(label: Text((snap.data as Map)['crime']))
-                            ],
-                          ),
-                        ),
-                        ListTile(
-                            title: Row(
+                  child: ListView(
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        title: Row(
                           children: [
-                            Text('Section'),
+                            Text('Crime'),
                             const SizedBox(width: 30),
-                            Chip(label: Text((snap.data as Map)['section_no']))
+                            Chip(label: Text((snap.data as Map)['crime']))
                           ],
-                        )),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Text('entry'),
-                                    SizedBox(width: deviceWidth * .04),
-                                    Chip(
-                                        label: Text(
-                                            (snap.data as Map)['entry_date']))
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Text('release'),
-                                    SizedBox(width: deviceWidth * .04),
-                                    Chip(
-                                        label: Text((snap.data
-                                            as Map)['releasing_date']))
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
                         ),
-                        Center(
-                          child: Container(
-                            height: 200,
-                            width: deviceWidth * .95,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Color.fromRGBO(255, 255, 255, .2)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                      ListTile(
+                          title: Row(
+                        children: [
+                          Text('Section'),
+                          const SizedBox(width: 30),
+                          Chip(label: Text((snap.data as Map)['section_no']))
+                        ],
+                      )),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Row(
                                 children: [
-                                  Text(
-                                    'address',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text((snap.data as Map)['address']),
+                                  Text('entry'),
+                                  SizedBox(width: deviceWidth * .04),
+                                  Chip(
+                                      label: Text(
+                                          (snap.data as Map)['entry_date']))
                                 ],
                               ),
                             ),
-                          ),
-                        ),
-                        Divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Text('Parole'),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text('from'),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Chip(
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Text('release'),
+                                  SizedBox(width: deviceWidth * .04),
+                                  Chip(
                                       label: Text(
-                                          (snap.data as Map)['starting_date'])),
-                                ),
-                                Text('to'),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Chip(
-                                    label: Text(
-                                        (snap.data as Map)['rejoining_date']),
-                                  ),
-                                )
-                              ],
+                                          (snap.data as Map)['releasing_date']))
+                                ],
+                              ),
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Text('Transfer'),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  height: 30,
-                                  width: 70,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Color.fromRGBO(255, 255, 255, .3)),
+                      ),
+                      Center(
+                        child: Container(
+                          height: 200,
+                          width: deviceWidth * .95,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Color.fromRGBO(255, 255, 255, .2)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'address',
+                                  style: TextStyle(fontSize: 18),
                                 ),
-                              ),
-                            ],
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text((snap.data as Map)['address']),
+                              ],
+                            ),
                           ),
                         ),
-                        Divider(),
-                        const Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            'visitors',
-                            style: TextStyle(fontSize: 20),
-                          ),
+                      ),
+                      Divider(),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     Padding(
+                      //       padding: const EdgeInsets.all(10),
+                      //       child: Text('Parole'),
+                      //     ),
+                      //     Row(
+                      //       mainAxisAlignment: MainAxisAlignment.end,
+                      //       children: [
+                      //         Text('from'),
+                      //         Padding(
+                      //           padding: const EdgeInsets.all(8.0),
+                      //           child: Chip(
+                      //               label: Text(
+                      //                   (snap.data as Map)['starting_date'])),
+                      //         ),
+                      //         Text('to'),
+                      //         Padding(
+                      //           padding: const EdgeInsets.all(8.0),
+                      //           child: Chip(
+                      //             label: Text(
+                      //                 (snap.data as Map)['rejoining_date']),
+                      //           ),
+                      //         )
+                      //       ],
+                      //     ),
+                      //   ],
+                      // ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Text('Transfer'),
+                            Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Chip(label: Text('                '))),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('No visiters...'),
-                        )
-                      ],
-                    ),
+                      ),
+                      Divider(),
+                      const Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          'visitors',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FutureBuilder(
+                          future: Provider.of<DBHelper>(context)
+                              .getVisitorsList(prisonerId),
+                          builder: (context, snap) {
+                            if (snap.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else {
+                              if (snap.hasData) {
+                                final visitors =
+                                    Provider.of<DBHelper>(context).visitorsList;
+                                return Container(
+                                  height: 300,
+                                  width: deviceWidth * .9,
+                                  child: ListView.builder(
+                                    itemCount: (visitors as List).length,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemBuilder: ((context, index) {
+                                      return ListTile(
+                                        leading: CircleAvatar(
+                                          backgroundImage:
+                                              AssetImage('assets/avatar.png'),
+                                        ),
+                                        title: Text(
+                                            visitors[index]['visitor_name']),
+                                        subtitle: Text(
+                                            visitors[index]['visiting_date']),
+                                        trailing: Text(
+                                            visitors[index]['visiting_time']),
+                                      );
+                                    }),
+                                  ),
+                                );
+                              } else {
+                                return Center(
+                                  child: Text('no data available'),
+                                );
+                              }
+                            }
+                          },
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ]);
