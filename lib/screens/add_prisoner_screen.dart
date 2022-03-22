@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:prisonbook/models/db_helper.dart';
+import 'package:prisonbook/screens/employee_home_page.dart';
 // import 'package:prisonbook/widgets/add_prisoner_sliver_appbar.dart';
 import 'package:provider/provider.dart';
 
@@ -72,30 +73,36 @@ class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
       });
   }
 
-  trySave() async{
+  trySave() async {
     setState(() {
       isLoading = true;
     });
     if (fkey.currentState!.validate()) {
-      fkey.currentState!.save();
-      isAdded =await Provider.of<DBHelper>(context,listen: false).addPrisoner(
-          name: name,
-          crime: crime,
-          entry_date: entryDate,
-          releasing_date: releaseDate,
-          age: age,
-          address: address,
-          cell_no: cell_no,
-          gender: gender,
-          imageFile: profileImage,
-          section: section);
+      if (profileImage != null) {
+        fkey.currentState!.save();
+        isAdded = await Provider.of<DBHelper>(context, listen: false)
+            .addPrisoner(
+                name: name,
+                crime: crime,
+                entry_date: entryDate,
+                releasing_date: releaseDate,
+                age: age,
+                address: address,
+                cell_no: cell_no,
+                gender: gender,
+                imageFile: profileImage,
+                section: section);
+      } else {
+        Fluttertoast.showToast(msg: 'please select image');
+        isAdded = false;
+      }
     }
     if (isAdded) {
       setState(() {
         isLoading = false;
       });
       Fluttertoast.showToast(msg: 'successfully added');
-      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacementNamed(EmployeeHomePage.routeName);
     } else {
       setState(() {
         isLoading = false;
@@ -118,8 +125,10 @@ class _AddPrisonerScreenState extends State<AddPrisonerScreen> {
         child: Icon(Icons.save),
       ),
       body: isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
+          ? Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
             )
           : CustomScrollView(
               slivers: [

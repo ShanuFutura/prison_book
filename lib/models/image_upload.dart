@@ -33,9 +33,9 @@ class ImageUpload {
     //contentType: new MediaType('image', 'png'));
     request.fields['prisoner_name'] = name;
     request.fields['crime'] = crime;
-    request.fields['entry_date'] = DateFormat('dd/mm/yyyy').format(entryDate);
+    request.fields['entry_date'] = DateFormat('dd/MM/yyyy').format(entryDate);
     request.fields['releasing_date'] =
-        DateFormat('dd/mm/yyyy').format(releaseDate);
+        DateFormat('dd/MM/yyyy').format(releaseDate);
     request.fields['age'] = age;
     request.fields['address'] = address;
     request.fields['cell_no'] = cellNo;

@@ -8,6 +8,8 @@ import 'package:prisonbook/screens/feedback_screen.dart';
 import 'package:prisonbook/screens/login_page.dart';
 import 'package:prisonbook/screens/officers_list_screen.dart';
 import 'package:prisonbook/screens/employee_profile_edit_screen.dart';
+import 'package:prisonbook/screens/parol_list.dart';
+import 'package:prisonbook/screens/prisoner_transfer_screen.dart';
 import 'package:provider/provider.dart';
 // import 'package:prisonbook/employee_screens/employees_list_screen.dart';
 // import 'package:prisonbook/employee_screens/officers_list_screen.dart';
@@ -90,8 +92,8 @@ class EmployeeDrawer extends StatelessWidget {
             ),
             Divider(),
             ListTile(
-              onTap: () =>
-                  Navigator.of(context).pushNamed(EmployeesListScreen.routeName),
+              onTap: () => Navigator.of(context)
+                  .pushNamed(EmployeesListScreen.routeName),
               title: Text('View Employees'),
               trailing: Icon(Icons.reorder),
             ),
@@ -101,6 +103,22 @@ class EmployeeDrawer extends StatelessWidget {
                   Navigator.of(context).pushNamed(OfficersListScreen.routeName),
               title: Text('officers'),
               trailing: Icon(Icons.local_police),
+            ),
+            Divider(),
+            ListTile(
+              onTap: () {
+                Navigator.of(context).pushNamed(ParolList.routeName);
+              },
+              title: Text('parole list'),
+              trailing: Icon(Icons.door_front_door_outlined),
+            ),
+            Divider(),
+            ListTile(
+              onTap: () {
+                Navigator.of(context).pushNamed(PrisonerTransferScreen.routeName);
+              },
+              title: Text('Prisoner transfers'),
+              trailing: Icon(Icons.local_shipping),
             ),
             Divider(),
             ListTile(

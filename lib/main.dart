@@ -19,6 +19,7 @@ import 'package:prisonbook/screens/officer_profile_edit_screen.dart';
 import 'package:prisonbook/screens/officers_list_screen.dart';
 import 'package:prisonbook/screens/parol_list.dart';
 import 'package:prisonbook/screens/employee_profile_edit_screen.dart';
+import 'package:prisonbook/screens/prisoner_transfer_screen.dart';
 // import 'package:prisonbook/widgets/prisons_list_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -86,6 +87,8 @@ class PrisonBook extends StatelessWidget {
           ParolList.routeName: (ctx) => ParolList(),
           FeedBackScreen.routeName: (ctx) => FeedBackScreen(),
           EmployeeHomePage.routeName: (ctx) => EmployeeHomePage(),
+          PrisonerTransferScreen.routeName: (context) =>
+              PrisonerTransferScreen(),
         },
       ),
     );

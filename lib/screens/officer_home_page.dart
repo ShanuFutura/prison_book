@@ -22,7 +22,7 @@ class OfficerHomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(
-            height: fullHeight * .3,
+            height: fullHeight * .27,
             child: Row(
               children: [
                 Expanded(

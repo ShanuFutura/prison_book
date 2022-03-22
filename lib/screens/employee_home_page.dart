@@ -11,15 +11,40 @@ import 'package:prisonbook/widgets/prisons_list_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class EmployeeHomePage extends StatelessWidget {
-  const EmployeeHomePage({Key? key}) : super(key: key);
+class EmployeeHomePage extends StatefulWidget {
+  EmployeeHomePage({Key? key}) : super(key: key);
 
   static const String routeName = 'employeehomepage';
 
   @override
+  State<EmployeeHomePage> createState() => _EmployeeHomePageState();
+}
+
+var punched = true;
+
+class _EmployeeHomePageState extends State<EmployeeHomePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isPunched();
+
+  }
+
+  isPunched() async {
+    final pref = await SharedPreferences.getInstance();
+    setState(() {
+      punched = (pref.getString('attend') ==
+          DateFormat('dd/MM/yyyy').format(DateTime.now()));
+    });
+    // pref.remove('attend');
+    
+  }
+
+  @override
   Widget build(BuildContext context) {
     final fullHeight = MediaQuery.of(context).size.height;
-    var punched = false;
+    // var canPuch = false;
 
     return Scaffold(
       body: CustomScrollView(
@@ -56,10 +81,6 @@ class EmployeeHomePage extends StatelessWidget {
             actions: [
               IconButton(
                   onPressed: () async {
-                    final pref = await SharedPreferences.getInstance();
-                    // pref.remove('attend');
-                    final isPunched = (pref.getString('attend') ==
-                        DateFormat('dd/MM/yyyy').format(DateTime.now()));
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -67,20 +88,25 @@ class EmployeeHomePage extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(40.0),
                               child: GestureDetector(
-                                onTap: () async {
-                                  final isDone = await Provider.of<DBHelper>(
-                                          context,
-                                          listen: false)
-                                      .punchIn();
-                                  if (isDone) {
-                                    Navigator.of(context).pop();
-                                    Fluttertoast.showToast(
-                                        msg: 'attendance registered');
-                                  // pref.remove('attend');
-                                  } else {
-                                    Fluttertoast.showToast(msg: 'failed');
-                                  }
-                                },
+                                onTap: punched
+                                    ? null
+                                    : () async {
+                                        final isDone =
+                                            await Provider.of<DBHelper>(context,
+                                                    listen: false)
+                                                .punchIn();
+                                        if (isDone) {
+                                          punched = true;
+                                          // punched = true;
+                                          Navigator.of(context).pop();
+                                          Fluttertoast.showToast(
+                                              msg: 'attendance registered');
+                                          // pref.remove('attend');
+                                        } else {
+                                          // punched = false;
+                                          Fluttertoast.showToast(msg: 'failed');
+                                        }
+                                      },
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -90,12 +116,14 @@ class EmployeeHomePage extends StatelessWidget {
                                       child: Icon(
                                         Icons.verified,
                                         size: 60,
-                                        color: isPunched
+                                        color: punched
                                             ? Colors.blue
                                             : Colors.white,
                                       ),
                                     ),
-                                    Text('Punch in'),
+                                    Text(punched
+                                        ? 'already punched'
+                                        : 'Punch in'),
                                   ],
                                 ),
                               ),

@@ -130,6 +130,7 @@ class MainPrisonerView extends StatelessWidget {
               Provider.of<DBHelper>(context).fetchPrisonerDetails(prisonerId),
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.waiting) {
+              print('fetching prisoner : ' + prisonerId);
               return Center(
                 child: CircularProgressIndicator(),
               );
@@ -259,17 +260,17 @@ class MainPrisonerView extends StatelessWidget {
                       //     ),
                       //   ],
                       // ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Text('Transfer'),
-                            Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Chip(label: Text('                '))),
-                          ],
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: Row(
+                      //     children: [
+                      //       Text('Transfer'),
+                      //       Padding(
+                      //           padding: const EdgeInsets.all(8.0),
+                      //           child: Chip(label: Text('                '))),
+                      //     ],
+                      //   ),
+                      // ),
                       Divider(),
                       const Padding(
                         padding: EdgeInsets.all(10.0),
@@ -283,43 +284,43 @@ class MainPrisonerView extends StatelessWidget {
                         child: FutureBuilder(
                           future: Provider.of<DBHelper>(context)
                               .getVisitorsList(prisonerId),
-                          builder: (context, snap) {
-                            if (snap.connectionState ==
+                          builder: (context, vsnap) {
+                            if (vsnap.connectionState ==
                                 ConnectionState.waiting) {
                               return Center(
                                 child: CircularProgressIndicator(),
                               );
+                            } else if ((vsnap.data as dynamic)[0]['message'] !=
+                                "failed") {
+                              // final visitors =
+                              //     Provider.of<DBHelper>(context).visitorsList;
+                              return Container(
+                                height: 300,
+                                width: deviceWidth * .9,
+                                child: ListView.builder(
+                                  itemCount: (vsnap.data as List).length,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemBuilder: ((context, index) {
+                                    return ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundImage:
+                                            AssetImage('assets/avatar.png'),
+                                      ),
+                                      title: Text((vsnap.data as dynamic)[index]
+                                          ['visitor_name']),
+                                      subtitle: Text((vsnap.data
+                                          as dynamic)[index]['visiting_date']),
+                                      trailing: Text((vsnap.data
+                                          as dynamic)[index]['visiting_time']),
+                                    );
+                                  }),
+                                ),
+                              );
                             } else {
-                              if (snap.hasData) {
-                                final visitors =
-                                    Provider.of<DBHelper>(context).visitorsList;
-                                return Container(
-                                  height: 300,
-                                  width: deviceWidth * .9,
-                                  child: ListView.builder(
-                                    itemCount: (visitors as List).length,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemBuilder: ((context, index) {
-                                      return ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundImage:
-                                              AssetImage('assets/avatar.png'),
-                                        ),
-                                        title: Text(
-                                            visitors[index]['visitor_name']),
-                                        subtitle: Text(
-                                            visitors[index]['visiting_date']),
-                                        trailing: Text(
-                                            visitors[index]['visiting_time']),
-                                      );
-                                    }),
-                                  ),
-                                );
-                              } else {
-                                return Center(
-                                  child: Text('no data available'),
-                                );
-                              }
+                              print(vsnap.data);
+                              return Center(
+                                child: Text('no data available'),
+                              );
                             }
                           },
                         ),

@@ -17,7 +17,6 @@ class PrisonsListView extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (snap.hasData) {
-            
             final prisonersList = Provider.of<DBHelper>(context).prisonersList;
 
             return ListView.builder(
@@ -27,22 +26,30 @@ class PrisonsListView extends StatelessWidget {
                 // physics:BouncingScrollPhysics(),
                 itemCount: prisonersList.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          Provider.of<DBHelper>(context).urlS +
-                              'images/' +
-                              prisonersList[index]['photo']),
-                    ),
-                    title: Text(prisonersList[index]['prisoner_name']),
-                    // subtitle: Text('prisoner number'),
-                    trailing: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                              MainPrisonerView.routeName,
-                              arguments: prisonersList[index]['prisoner_id']);
-                        },
-                        child: Text('View')),
+                  return Column(
+                    children: [
+                      ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              Provider.of<DBHelper>(context).urlS +
+                                  'images/' +
+                                  prisonersList[index]['photo']),
+                        ),
+                        title: Text(prisonersList[index]['prisoner_name']),
+                        // subtitle: Text('prisoner number'),
+                        trailing: TextButton(
+                            onPressed: () {
+                              print('selected prisoner : ' +
+                                  prisonersList[index]['prisoner_id']);
+                              Navigator.of(context).pushNamed(
+                                  MainPrisonerView.routeName,
+                                  arguments: prisonersList[index]
+                                      ['prisoner_id']);
+                            },
+                            child: Text('View')),
+                      ),
+                      const Divider()
+                    ],
                   );
                 });
           } else
