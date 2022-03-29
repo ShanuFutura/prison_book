@@ -27,8 +27,8 @@ class _EmployeeHomePageState extends State<EmployeeHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+// Provider.of<DBHelper>(context).fetchAndSetUserId();
     isPunched();
-
   }
 
   isPunched() async {
@@ -38,7 +38,6 @@ class _EmployeeHomePageState extends State<EmployeeHomePage> {
           DateFormat('dd/MM/yyyy').format(DateTime.now()));
     });
     // pref.remove('attend');
-    
   }
 
   @override

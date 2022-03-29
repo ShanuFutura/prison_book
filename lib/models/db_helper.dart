@@ -51,6 +51,7 @@ class DBHelper extends ChangeNotifier {
   }
 
   Future<List> fetchAndSetPrisonersList() async {
+    fetchAndSetUserId();
     final res = await get(Uri.parse(urlS + 'prisoner_list.php'));
     prisonersList = jsonDecode(res.body);
     print('list fetch :' + prisonersList[0]['photo']);
@@ -76,6 +77,7 @@ class DBHelper extends ChangeNotifier {
       } else {
         pref.setString('type', jsonDecode(res.body)['type']);
         pref.setString('id', jsonDecode(res.body)['id']);
+        print('user id set as' + jsonDecode(res.body)['id']);
         return jsonDecode(res.body)['type'];
       }
     } on Exception catch (error) {
@@ -181,6 +183,7 @@ class DBHelper extends ChangeNotifier {
 
   Future<bool> punchIn() async {
     try {
+      //print('empId' + userId);
       final res = await post(Uri.parse(urlS + 'add_attandance.php'), body: {
         'emp_id': userId.toString(),
         'date': DateFormat('yyyy-MM-dd').format(DateTime.now())

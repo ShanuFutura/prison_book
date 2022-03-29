@@ -10,6 +10,7 @@ import 'package:prisonbook/screens/officer_attendance_view.dart';
 // import 'package:prisonbook/screens/officer_home_page.dart';
 import 'package:prisonbook/screens/officer_profile_edit_screen.dart';
 import 'package:prisonbook/screens/parol_list.dart';
+import 'package:prisonbook/screens/prisoner_transfer_screen.dart';
 import 'package:provider/provider.dart';
 // import 'package:prisonbook/widgets/employee_list.dart';
 
@@ -19,7 +20,9 @@ class OfficerDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? profileImage =
-        Provider.of<DBHelper>(context).officersDetails==null? null :Provider.of<DBHelper>(context).officersDetails['photo'];
+        Provider.of<DBHelper>(context).officersDetails == null
+            ? null
+            : Provider.of<DBHelper>(context).officersDetails['photo'];
     return Drawer(
       child: Column(
         children: [
@@ -85,6 +88,16 @@ class OfficerDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushNamed(ParolList.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            title: Text('Transfers'),
+            trailing: Icon(Icons.local_shipping),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(PrisonerTransferScreen.routeName);
+              // Navigator.push(context, MaterialPageRoute(builder: Empl));
             },
           ),
           Divider(),

@@ -31,6 +31,10 @@ class OfficerAttendanceView extends StatelessWidget {
             builder: (context, snap) {
               if (snap.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
+              } else if ((snap.data as dynamic)[0]['message'] == 'failed') {
+                return const Center(
+                  child: Text('No attendance today'),
+                );
               } else {
                 return ListView.builder(
                     shrinkWrap: true,
