@@ -60,11 +60,9 @@ class EmployeeDrawer extends StatelessWidget {
                                 ConnectionState.done) {
                               return CircleAvatar(
                                   radius: 80,
-                                  backgroundImage: NetworkImage(
-                                      Provider.of<DBHelper>(context)
-                                              .urlForEMployeeImageFetch +
-                                          'assets/images/' +
-                                          (snap.data as Map)['photo']));
+                                  backgroundImage:
+                                      AssetImage('assets/avatar.png')
+                                          as ImageProvider);
                             } else {
                               return const CircleAvatar(
                                   radius: 80,
@@ -85,7 +83,7 @@ class EmployeeDrawer extends StatelessWidget {
                         ),
                       ),
                     ]),
-                    Text('User Name')
+                    // Text('User Name')
                   ],
                 ),
               ),
@@ -115,7 +113,8 @@ class EmployeeDrawer extends StatelessWidget {
             Divider(),
             ListTile(
               onTap: () {
-                Navigator.of(context).pushNamed(PrisonerTransferScreen.routeName);
+                Navigator.of(context)
+                    .pushNamed(PrisonerTransferScreen.routeName);
               },
               title: Text('Prisoner transfers'),
               trailing: Icon(Icons.local_shipping),

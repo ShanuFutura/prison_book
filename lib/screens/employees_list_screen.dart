@@ -11,7 +11,9 @@ class EmployeesListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final empList = Provider.of<DBHelper>(context).employeeList;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("Employees"),
+      ),
       body: FutureBuilder(
           future: Provider.of<DBHelper>(context).fetchAndSetEmployeesList(),
           builder: (context, snap) {

@@ -50,7 +50,7 @@ class _EmployeeHomePageState extends State<EmployeeHomePage> {
         slivers: [
           SliverAppBar(
             flexibleSpace: FlexibleSpaceBar(
-              title: Text('Project Name'),
+              title: Text('PrisonBook'),
               background: Stack(
                 alignment: Alignment.center,
                 children: [
