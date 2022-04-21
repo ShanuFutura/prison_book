@@ -17,7 +17,9 @@ class OfficerHomePage extends StatelessWidget {
         MediaQuery.of(context).size.height - AppBar().preferredSize.height;
     return Scaffold(
       drawer: OfficerDrawer(),
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('Prisonbook'),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

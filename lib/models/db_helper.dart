@@ -10,8 +10,8 @@ import 'package:prisonbook/models/image_upload.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DBHelper extends ChangeNotifier {
-  final String urlS = 'http://192.168.29.77/prison/API/';
-  final String urlForEMployeeImageFetch = 'http://192.168.29.77/prison/';
+  final String urlS = 'http://192.168.29.78/prison/API/';
+  final String urlForEMployeeImageFetch = 'http://192.168.29.78/prison/';
 
   File? EmployeeProfileImage;
 
@@ -138,9 +138,9 @@ class DBHelper extends ChangeNotifier {
   }
 
   Future<dynamic> getProfileDetailsToView() async {
-    // print('test');
+    final spref = await SharedPreferences.getInstance();
     final res =
-        await post(Uri.parse(urlS + 'update.php'), body: {'emp_id': '2'});
+        await post(Uri.parse(urlS + 'update.php'), body: {'emp_id': userId});
     print('res........' + (jsonDecode(res.body)).toString());
     return jsonDecode(res.body);
   }

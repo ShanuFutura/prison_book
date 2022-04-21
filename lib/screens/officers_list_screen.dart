@@ -10,7 +10,9 @@ class OfficersListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('Officers'),
+      ),
       body: FutureBuilder(
           future: Provider.of<DBHelper>(context).fetchAndSetOfficersList(),
           builder: (context, snap) {
